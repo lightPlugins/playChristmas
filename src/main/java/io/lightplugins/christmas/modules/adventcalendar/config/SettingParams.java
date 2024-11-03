@@ -4,13 +4,13 @@ import io.lightplugins.christmas.modules.adventcalendar.LightAdventCalendar;
 
 public class SettingParams {
 
-    private final LightAdventCalendar lightBank;
+    private final LightAdventCalendar lightAdventCalendar;
 
     public SettingParams(LightAdventCalendar lightBank) {
-        this.lightBank = lightBank;
+        this.lightAdventCalendar = lightBank;
     }
 
     public String getModuleLanguage() {
-        return lightBank.getSettings().getString("module-language");
+        return lightAdventCalendar.getSettings().getConfig().getString("module-language");
     }
 }

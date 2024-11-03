@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Getter
-public class PlayerModel {
+public class AdventModel {
 
     private UUID playerUUID;
     private String playerName;

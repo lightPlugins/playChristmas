@@ -1,9 +1,10 @@
 package io.lightplugins.christmas.modules.adventcalendar;
 
 import io.lightplugins.christmas.LightMaster;
-import io.lightplugins.christmas.modules.adventcalendar.commands.DummyCommand;
+import io.lightplugins.christmas.modules.adventcalendar.commands.OpenAdventCalendarCommand;
 import io.lightplugins.christmas.modules.adventcalendar.config.MessageParams;
 import io.lightplugins.christmas.modules.adventcalendar.config.SettingParams;
+import io.lightplugins.christmas.modules.adventcalendar.listener.OnPlayerJoin;
 import io.lightplugins.christmas.util.SubCommand;
 import io.lightplugins.christmas.util.interfaces.LightModule;
 import io.lightplugins.christmas.util.manager.CommandManager;
@@ -11,7 +12,6 @@ import io.lightplugins.christmas.util.manager.FileManager;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.command.PluginCommand;
-import org.bukkit.configuration.file.FileConfiguration;
 
 import java.util.ArrayList;
 
@@ -29,7 +29,8 @@ public class LightAdventCalendar implements LightModule {
 
     private FileManager settings;
     private FileManager language;
-    private FileManager dummyInventory;
+    private FileManager adventCalendar;
+    private FileManager adventRewards;
 
 
     @Override
@@ -48,6 +49,7 @@ public class LightAdventCalendar implements LightModule {
         LightMaster.instance.getDebugPrinting().print(LightMaster.instance.getConsolePrefix() +
                 "Registering subcommands for module " + this.moduleName + "...");
         initSubCommands();
+        registerEvents();
         this.isModuleEnabled = true;
         LightMaster.instance.getDebugPrinting().print(LightMaster.instance.getConsolePrefix() +
                 "Successfully started module " + this.moduleName + "!");
@@ -60,7 +62,9 @@ public class LightAdventCalendar implements LightModule {
     }
 
     @Override
-    public void reload() { enable(); }
+    public void reload() {
+        initFiles();
+    }
 
     @Override
     public boolean isEnabled() {
@@ -72,15 +76,13 @@ public class LightAdventCalendar implements LightModule {
         return moduleName;
     }
 
-    public FileConfiguration getSettings() { return this.settings.getConfig(); }
-
-    public FileConfiguration getLanguage() { return this.language.getConfig(); }
-
     private void initFiles() {
         this.settings = new FileManager(
                 LightMaster.instance, moduleName + "/settings.yml", true);
-        this.dummyInventory = new FileManager(
-                LightMaster.instance, moduleName + "/inventories/_example.yml", false);
+        this.adventCalendar = new FileManager(
+                LightMaster.instance, moduleName + "/inventories/advent-calendar.yml", false);
+        this.adventRewards = new FileManager(
+                LightMaster.instance, moduleName + "/rewards/advent-rewards.yml", false);
     }
 
     private void selectLanguage() {
@@ -88,8 +90,12 @@ public class LightAdventCalendar implements LightModule {
     }
 
     private void initSubCommands() {
-        PluginCommand ecoCommand = Bukkit.getPluginCommand("lightdummy");
-        subCommands.add(new DummyCommand());
+        PluginCommand ecoCommand = Bukkit.getPluginCommand("advent");
+        subCommands.add(new OpenAdventCalendarCommand());
         new CommandManager(ecoCommand, subCommands);
+    }
+
+    private void registerEvents() {
+        Bukkit.getPluginManager().registerEvents(new OnPlayerJoin(), LightMaster.instance);
     }
 }
