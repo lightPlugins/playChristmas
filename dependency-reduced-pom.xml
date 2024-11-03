@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>io.lightplugins.dummy</groupId>
-  <artifactId>lightModule</artifactId>
-  <version>0.0.1</version>
+  <groupId>io.lightplugins.christmas</groupId>
+  <artifactId>playChristmas</artifactId>
+  <version>0.1.0</version>
   <build>
     <defaultGoal>clean package</defaultGoal>
     <plugins>
@@ -20,7 +20,11 @@
               <relocations>
                 <relocation>
                   <pattern>com.zaxxer.hikari</pattern>
-                  <shadedPattern>io.lightplugins.dummy.util.database.hikari</shadedPattern>
+                  <shadedPattern>io.lightplugins.christmas.util.relocations.hikari</shadedPattern>
+                </relocation>
+                <relocation>
+                  <pattern>com.github.stefvanschie.inventoryframework</pattern>
+                  <shadedPattern>io.lightplugins.christmas.util.relocations.if</shadedPattern>
                 </relocation>
               </relocations>
               <outputFile>C:/Users/philipp/Desktop/mc/plugins/${project.artifactId}-${project.version}-SNAPSHOT.jar</outputFile>
@@ -112,12 +116,6 @@
       <groupId>net.kyori</groupId>
       <artifactId>adventure-text-minimessage</artifactId>
       <version>4.17.0</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>me.lucko</groupId>
-      <artifactId>helper</artifactId>
-      <version>5.6.13</version>
       <scope>provided</scope>
     </dependency>
   </dependencies>

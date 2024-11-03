@@ -4,9 +4,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>io.lightplugins.dummy</groupId>
-    <artifactId>lightModule</artifactId>
-    <version>0.0.1</version>
+    <groupId>io.lightplugins.christmas</groupId>
+    <artifactId>playChristmas</artifactId>
+    <version>0.1.0</version>
 
     <properties>
         <java.version>17</java.version>
@@ -117,13 +117,6 @@
         </dependency>
 
         <dependency>
-            <groupId>me.lucko</groupId>
-            <artifactId>helper</artifactId>
-            <version>5.6.13</version>
-            <scope>provided</scope>
-        </dependency>
-
-        <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>1.18.34</version>
@@ -149,7 +142,11 @@
                             <relocations>
                                 <relocation>
                                     <pattern>com.zaxxer.hikari</pattern>
-                                    <shadedPattern>io.lightplugins.dummy.util.database.hikari</shadedPattern>
+                                    <shadedPattern>io.lightplugins.christmas.util.relocations.hikari</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>com.github.stefvanschie.inventoryframework</pattern>
+                                    <shadedPattern>io.lightplugins.christmas.util.relocations.if</shadedPattern>
                                 </relocation>
                             </relocations>
                             <!-- Desktop PC -->
