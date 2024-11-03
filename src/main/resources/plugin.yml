@@ -10,7 +10,7 @@ libraries: []
 #  - org.mariadb.jdbc:mariadb-java-client:2.7.4
 #  - com.zaxxer:HikariCP:5.1.0
 commands:
-  adventcalendar:
+  advent:
     description: The root command for the module adventcalendar
     aliases: [ac, adventskalender]
   secretsanta:

@@ -1,9 +1,6 @@
 package io.lightplugins.christmas.modules.adventcalendar.commands;
 
-import io.lightplugins.christmas.LightMaster;
-import io.lightplugins.christmas.modules.adventcalendar.LightAdventCalendar;
 import io.lightplugins.christmas.util.SubCommand;
-import io.lightplugins.christmas.util.constructor.InvCreator;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
@@ -11,20 +8,20 @@ import org.bukkit.entity.Player;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-public class DummyCommand extends SubCommand {
+public class OpenAdventCalendarCommand extends SubCommand {
     @Override
     public List<String> getName() {
-        return List.of("dummy");
+        return List.of("open");
     }
 
     @Override
     public String getDescription() {
-        return "Dummy command opens a dummy inventory";
+        return "Open the advent calendar";
     }
 
     @Override
     public String getSyntax() {
-        return "/lightdummy dummy";
+        return "/advent open";
     }
 
     @Override
@@ -39,14 +36,21 @@ public class DummyCommand extends SubCommand {
 
     @Override
     public TabCompleter registerTabCompleter() {
-        return (sender, command, alias, args) -> List.of("dummy");
+        return ((sender, command, alias, args) -> {
+
+            if(args.length == 1) {
+                return List.of("open");
+            }
+
+            return null;
+        });
     }
 
     @Override
     public boolean performAsPlayer(Player player, String[] args) throws ExecutionException, InterruptedException {
-        InvCreator invCreator = LightMaster.instance.getInventoryManager().generateInventoryFromFileManager(
-                LightAdventCalendar.instance.getDummyInventory(), player);
-        invCreator.openInventory();
+
+
+
         return false;
     }
 

@@ -1,49 +1,268 @@
 # This file contains the rewards for the advent calendar.
-#
-# Possible actions:
-#  - "booster;fly" - Gives the player a fly booster.
-#  - "item;give:<item>:<amount>" - Gives the player an item.
-#  - "coins;add:<amount>" - Adds coins to the player's balance.
-#  - "crate-key;<crate>:<amount>" - Gives the player a crate key.
-#  - "rank;<rank>:<duration>:<prefix>" - Gives the player a rank.
+# The rewards are given to the player when they open the door.
+gui-items:
+  not-ready:
+    id: gui_item
+    args:
+      placeholders: [ ]
+      item: 'red_stained_glass_pane #day# hide_attributes'
+      head-data: ''
+      display-name: '<gray>Tag <#ffdc73>#day# <gray>- <dark_gray>#date#'
+      lore:
+        - ' '
+        - 'Belohnungen:'
+        - '- #rewards#'
+        - ' '
+        - '<gray>Du kannst dieses Geschenk'
+        - '<gray>noch nicht abholen.'
+      click-actions:
+        - 'sound;ENTITY_VILLAGER_NO:1.0:1.0'
+  ready:
+    id: gui_item
+    args:
+      placeholders: [ ]
+      item: 'yellow_stained_glass_pane #day# hide_attributes hide_enchantments glow'
+      head-data: ''
+      display-name: '<gray>Tag <#ffdc73>1 <gray>- <dark_gray>01.12.2024'
+      lore:
+        - ' '
+        - 'Belohnungen:'
+        - '- #rewards#'
+        - ' '
+        - '<gray>Klicke, um das Geschenk'
+      click-actions:
+        - 'claim-day'
+        - 'sound;ENTITY_PLAYER_LEVELUP:1.0:1.0'
+  already-claimed:
+    id: gui_item
+    args:
+      placeholders: [ ]
+      item: 'green_stained_glass_pane #day# hide_attributes'
+      head-data: ''
+      display-name: '<gray>Tag <#ffdc73>1 <gray>- <dark_gray>01.12.2024'
+      lore:
+        - ' '
+        - 'Belohnungen:'
+        - '- #rewards#'
+        - ' '
+        - '<gray>Du hast dieses Geschenk'
+        - '<gray>bereits abgeholt.'
+      click-actions:
+        - 'sound;ENTITY_VILLAGER_NO:1.0:1.0'
 rewards:
   '1':
-    args:
-      actions:
-        - 'booster;fly'
+    rewards:
+      '0':
+        id: give-item
+        data: 'diamond 1'
+    requirements:
+      args:
+        id: date
+        data: '01.12.2024 00:00'
   '2':
-    args:
-      actions:
-        - 'item;give:diamond:32'
+    rewards:
+      args:
+        id: give-item
+        data: 'diamond 1'
+    requirements:
+      args:
+        id: date
+        data: '02.12.2024 00:00'
   '3':
-    args:
-      actions:
-        - 'coins;add:1000'
+    rewards:
+      args:
+        id: give-item
+        data: 'diamond 1'
+    requirements:
+      args:
+        id: date
+        data: '03.12.2024 00:00'
   '4':
-    args:
-      actions:
-        - 'crate-key;abenteurer:1'
+    rewards:
+      args:
+        id: give-item
+        data: 'diamond 1'
+    requirements:
+      args:
+        id: date
+        data: '04.12.2024 00:00'
   '5':
-    args:
-      actions:
-        - 'item;give:emerald:32'
+    rewards:
+      args:
+        id: give-item
+        data: 'diamond 1'
+    requirements:
+      args:
+        id: date
+        data: '05.12.2024 00:00'
   '6':
-    args:
-      actions:
-        - 'rank;premium:1:d'
+    rewards:
+      args:
+        id: give-item
+        data: 'diamond 1'
+    requirements:
+      args:
+        id: date
+        data: '06.12.2024 00:00'
   '7':
-    args:
-      actions:
-        - 'coins;add:1500'
+    rewards:
+      args:
+        id: give-item
+        data: 'diamond 1'
+    requirements:
+      args:
+        id: date
+        data: '07.12.2024 00:00'
   '8':
-    args:
-      actions:
-        - 'booster;strength'
+    rewards:
+      args:
+        id: give-item
+        data: 'diamond 1'
+    requirements:
+      args:
+        id: date
+        data: '08.12.2024 00:00'
   '9':
-    args:
-      actions:
-        - 'item;give:emerald:32'
+    rewards:
+      args:
+        id: give-item
+        data: 'diamond 1'
+    requirements:
+      args:
+        id: date
+        data: '09.12.2024 00:00'
   '10':
-    args:
-      actions:
-        - 'crate-key;schleiher:1'
+    rewards:
+      args:
+        id: give-item
+        data: 'diamond 1'
+    requirements:
+      args:
+        id: date
+        data: '10.12.2024 00:00'
+  '11':
+    rewards:
+      args:
+        id: give-item
+        data: 'diamond 1'
+    requirements:
+      args:
+        id: date
+        data: '11.12.2024 00:00'
+  '12':
+    rewards:
+      args:
+        id: give-item
+        data: 'diamond 1'
+    requirements:
+      args:
+        id: date
+        data: '12.12.2024 00:00'
+  '13':
+    rewards:
+      args:
+        id: give-item
+        data: 'diamond 1'
+    requirements:
+      args:
+        id: date
+        data: '13.12.2024 00:00'
+  '14':
+    rewards:
+      args:
+        id: give-item
+        data: 'diamond 1'
+    requirements:
+      args:
+        id: date
+        data: '14.12.2024 00:00'
+  '15':
+    rewards:
+      args:
+        id: give-item
+        data: 'diamond 1'
+    requirements:
+      args:
+        id: date
+        data: '15.12.2024 00:00'
+  '16':
+    rewards:
+      args:
+        id: give-item
+        data: 'diamond 1'
+    requirements:
+      args:
+        id: date
+        data: '16.12.2024 00:00'
+  '17':
+    rewards:
+      args:
+        id: give-item
+        data: 'diamond 1'
+    requirements:
+      args:
+        id: date
+        data: '17.12.2024 00:00'
+  '18':
+    rewards:
+      args:
+        id: give-item
+        data: 'diamond 1'
+    requirements:
+      args:
+        id: date
+        data: '18.12.2024 00:00'
+  '19':
+    rewards:
+      args:
+        id: give-item
+        data: 'diamond 1'
+    requirements:
+      args:
+        id: date
+        data: '19.12.2024 00:00'
+  '20':
+    rewards:
+      args:
+        id: give-item
+        data: 'diamond 1'
+    requirements:
+      args:
+        id: date
+        data: '20.12.2024 00:00'
+  '21':
+    rewards:
+      args:
+        id: give-item
+        data: 'diamond 1'
+    requirements:
+      args:
+        id: date
+        data: '21.12.2024 00:00'
+  '22':
+    rewards:
+      args:
+        id: give-item
+        data: 'diamond 1'
+    requirements:
+      args:
+        id: date
+        data: '22.12.2024 00:00'
+  '23':
+    rewards:
+      args:
+        id: give-item
+        data: 'diamond 1'
+    requirements:
+      args:
+        id: date
+        data: '23.12.2024 00:00'
+  '24':
+    rewards:
+      args:
+        id: give-item
+        data: 'diamond 1'
+    requirements:
+      args:
+        id: date
+        data: '24.12.2024 00:00'
