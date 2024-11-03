@@ -1,0 +1,49 @@
+# This file contains the rewards for the advent calendar.
+#
+# Possible actions:
+#  - "booster;fly" - Gives the player a fly booster.
+#  - "item;give:<item>:<amount>" - Gives the player an item.
+#  - "coins;add:<amount>" - Adds coins to the player's balance.
+#  - "crate-key;<crate>:<amount>" - Gives the player a crate key.
+#  - "rank;<rank>:<duration>:<prefix>" - Gives the player a rank.
+rewards:
+  '1':
+    args:
+      actions:
+        - 'booster;fly'
+  '2':
+    args:
+      actions:
+        - 'item;give:diamond:32'
+  '3':
+    args:
+      actions:
+        - 'coins;add:1000'
+  '4':
+    args:
+      actions:
+        - 'crate-key;abenteurer:1'
+  '5':
+    args:
+      actions:
+        - 'item;give:emerald:32'
+  '6':
+    args:
+      actions:
+        - 'rank;premium:1:d'
+  '7':
+    args:
+      actions:
+        - 'coins;add:1500'
+  '8':
+    args:
+      actions:
+        - 'booster;strength'
+  '9':
+    args:
+      actions:
+        - 'item;give:emerald:32'
+  '10':
+    args:
+      actions:
+        - 'crate-key;schleiher:1'

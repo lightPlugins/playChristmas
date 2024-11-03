@@ -1,0 +1,78 @@
+gui-title: 'Example Custom GUI'
+rows: 6
+pattern:
+  - '1100a0011'
+  - '100000001'
+  - '000000000'
+  - '000000000'
+  - '100000001'
+  - '1100b0011'
+extras:
+  not-ready:
+    id: gui_item
+    args:
+      placeholders: [ ]
+      item: 'black_stained_glass_pane 1 hide_attributes'
+      head-data: ''
+      display-name: ' '
+      lore: [ ]
+      click-actions: [ ]
+  ready-to-claim:
+    id: gui_item
+    args:
+      placeholders: [ ]
+      item: 'black_stained_glass_pane 1 hide_attributes'
+      head-data: ''
+      display-name: ' '
+      lore: [ ]
+      click-actions: [ ]
+  already-claimed:
+    id: gui_item
+    args:
+      placeholders: [ ]
+      item: 'black_stained_glass_pane 1 hide_attributes'
+      head-data: ''
+      display-name: ' '
+      lore: [ ]
+      click-actions: [ ]
+contents:
+  'a':
+    id: gui_item
+    args:
+      placeholders: [ ]
+      item: 'bell 1 hide_attributes glow hide_enchants'
+      head-data: ''
+      display-name: '<red>#1 <gray>Adventskalender 2024'
+      lore:
+        - '<gray>Hier kannst du jeden Tag ein'
+        - '<gray>neues <#ffsc73>Geschenk abholen!'
+      click-actions: [ ]
+  'b':
+    id: gui_item
+    args:
+      placeholders: [ ]
+      item: 'redstone 1 hide_attributes glow hide_enchants'
+      head-data: ''
+      display-name: '<red>Zurück'
+      lore:
+        - '<gray>Zurück zum Hauptmenü'
+      click-actions:
+        - 'open;christmas-main'
+  '0':
+    id: gui_item
+    args:
+      placeholders: [ ]
+      item: 'black_stained_glass_pane 1 hide_attributes'
+      head-data: ''
+      display-name: ' '
+      lore: [ ]
+      click-actions: [ ]
+  '1':
+    id: gui_item
+    args:
+      placeholders: [ ]
+      item: 'gray_stained_glass_pane 1 hide_attributes'
+      head-data: ''
+      display-name: ' '
+      lore: [ ]
+      click-actions: [ ]
