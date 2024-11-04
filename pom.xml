@@ -150,9 +150,9 @@
                                 </relocation>
                             </relocations>
                             <!-- Desktop PC -->
-                            <!-- <outputFile>./lightdummy-dev-server/plugins/${project.artifactId}-${project.version}-SNAPSHOT.jar</outputFile> -->
+                            <outputFile>C:/Users/phili/Desktop/playnayz development/plugins/${project.artifactId}-${project.version}-SNAPSHOT.jar</outputFile>
                             <!-- Laptop -->
-                            <outputFile>C:/Users/philipp/Desktop/mc/plugins/${project.artifactId}-${project.version}-SNAPSHOT.jar</outputFile>
+                            <!-- <outputFile>C:/Users/philipp/Desktop/mc/plugins/${project.artifactId}-${project.version}-SNAPSHOT.jar</outputFile> -->
                            <filters>
                                 <filter>
                                     <artifact>*:*</artifact>

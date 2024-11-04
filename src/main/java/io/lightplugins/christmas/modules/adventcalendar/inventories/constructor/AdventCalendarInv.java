@@ -36,7 +36,8 @@ public class AdventCalendarInv {
     public void openInventory() {
 
         gui.setRows(invConstructor.getRows());
-        gui.setTitle(invConstructor.getGuiTitle());
+        gui.setTitle(LightMaster.instance.getColorTranslation().loreLineTranslation(invConstructor.getGuiTitle(), player));
+        gui.update();
         gui.setOnGlobalClick(event -> event.setCancelled(true));
 
         bukkitTask = Bukkit.getScheduler().runTaskTimer(LightMaster.instance, this::refreshGui, 0, refreshRate);
@@ -89,7 +90,7 @@ public class AdventCalendarInv {
     }
 
     private void refreshGui() {
-        gui.setTitle(invConstructor.getGuiTitle());
+        // gui.setTitle(invConstructor.getGuiTitle());
 
         // Clear existing items in the pattern pane
         PatternPane patternPane = (PatternPane) gui.getPanes().getFirst();

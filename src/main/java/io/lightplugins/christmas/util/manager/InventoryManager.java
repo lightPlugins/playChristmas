@@ -1,7 +1,7 @@
 package io.lightplugins.christmas.util.manager;
 
+import io.lightplugins.christmas.modules.adventcalendar.inventories.constructor.AdventCalendarInv;
 import io.lightplugins.christmas.util.constructor.InvConstructor;
-import io.lightplugins.christmas.util.constructor.InvCreator;
 import lombok.Getter;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -23,7 +23,7 @@ public class InventoryManager {
      * @return an InvCreator instance for the generated inventory
      */
 
-    public InvCreator generateInventoryFromFileManager(FileManager file, Player player) {
+    public AdventCalendarInv generateInventoryFromFileManager(FileManager file, Player player) {
 
         FileConfiguration conf = file.getConfig();
         InvConstructor invConstructor = new InvConstructor();
@@ -40,11 +40,11 @@ public class InventoryManager {
         invConstructor.setPattern(pattern);
         invConstructor.setClickItemHandlersSection(clickContent);
 
-        return new InvCreator(invConstructor, player);
+        return new AdventCalendarInv(invConstructor, player);
 
     }
 
-    public InvCreator generateInventoryFromFile(File file, Player player) {
+    public AdventCalendarInv generateInventoryFromFile(File file, Player player) {
 
         FileConfiguration conf = YamlConfiguration.loadConfiguration(file);
         InvConstructor invConstructor = new InvConstructor();
@@ -61,7 +61,7 @@ public class InventoryManager {
         invConstructor.setPattern(pattern);
         invConstructor.setClickItemHandlersSection(clickContent);
 
-        return new InvCreator(invConstructor, player);
+        return new AdventCalendarInv(invConstructor, player);
 
     }
 }

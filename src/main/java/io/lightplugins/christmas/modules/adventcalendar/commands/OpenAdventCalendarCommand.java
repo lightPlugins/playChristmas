@@ -1,6 +1,9 @@
 package io.lightplugins.christmas.modules.adventcalendar.commands;
 
+import io.lightplugins.christmas.modules.adventcalendar.LightAdventCalendar;
+import io.lightplugins.christmas.modules.adventcalendar.inventories.constructor.AdventCalendarInv;
 import io.lightplugins.christmas.util.SubCommand;
+import io.lightplugins.christmas.util.constructor.InvConstructor;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
@@ -49,7 +52,10 @@ public class OpenAdventCalendarCommand extends SubCommand {
     @Override
     public boolean performAsPlayer(Player player, String[] args) throws ExecutionException, InterruptedException {
 
-
+        AdventCalendarInv adventCalendarInv =
+                LightAdventCalendar.instance.getInventoryManager().generateInventoryFromFileManager(
+                        LightAdventCalendar.instance.getAdventCalendar(), player);
+        adventCalendarInv.openInventory();
 
         return false;
     }

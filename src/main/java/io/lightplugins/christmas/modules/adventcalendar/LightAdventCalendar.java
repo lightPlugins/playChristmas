@@ -9,6 +9,7 @@ import io.lightplugins.christmas.util.SubCommand;
 import io.lightplugins.christmas.util.interfaces.LightModule;
 import io.lightplugins.christmas.util.manager.CommandManager;
 import io.lightplugins.christmas.util.manager.FileManager;
+import io.lightplugins.christmas.util.manager.InventoryManager;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.command.PluginCommand;
@@ -19,6 +20,7 @@ import java.util.ArrayList;
 public class LightAdventCalendar implements LightModule {
 
     public static LightAdventCalendar instance;
+    public InventoryManager inventoryManager;
     public boolean isModuleEnabled = false;
 
     public final String moduleName = "advent-calendar";
@@ -50,6 +52,7 @@ public class LightAdventCalendar implements LightModule {
                 "Registering subcommands for module " + this.moduleName + "...");
         initSubCommands();
         registerEvents();
+        this.inventoryManager = new InventoryManager();
         this.isModuleEnabled = true;
         LightMaster.instance.getDebugPrinting().print(LightMaster.instance.getConsolePrefix() +
                 "Successfully started module " + this.moduleName + "!");

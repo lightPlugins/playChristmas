@@ -11,6 +11,6 @@ public class SettingParams {
     }
 
     public String getModuleLanguage() {
-        return lightBank.getSettings().getString("module-language");
+        return lightBank.getSettings().getConfig().getString("module-language");
     }
 }

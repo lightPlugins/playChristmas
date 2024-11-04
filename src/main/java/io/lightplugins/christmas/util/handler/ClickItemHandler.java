@@ -14,6 +14,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.SkullMeta;
 
 import java.util.*;
 
@@ -160,19 +161,17 @@ public class ClickItemHandler {
             return new ItemStack(Material.STONE, 1);
         }
 
-        UUID uuid = UUID.fromString(headData);
-        Player skullPlayer = Bukkit.getPlayer(uuid);
         OfflinePlayer offlinePlayer = Bukkit.getPlayer(headData);
 
-        if(skullPlayer != null) {
-            itemStack = SkullUtil.getPlayerSkull(skullPlayer);
-        } else if(offlinePlayer != null) {
-            itemStack = SkullUtil.getPlayerSkull(offlinePlayer.getPlayer());
-        } else {
-            LightMaster.instance.getDebugPrinting().configError("Invalid head data: " + headData + " in file: " + GUI_ITEM_ARGS.getCurrentPath());
-            LightMaster.instance.getDebugPrinting().configError("Head data must be a valid UUID or name.");
-            LightMaster.instance.getDebugPrinting().configError("It is set to the backup material -> Stone");
-            return new ItemStack(Material.STONE, 1);
+        if(itemStack.getItemMeta() instanceof SkullMeta) {
+            if(offlinePlayer != null) {
+                itemStack = SkullUtil.getPlayerSkull(offlinePlayer.getPlayer());
+            } else {
+                LightMaster.instance.getDebugPrinting().configError("Invalid head data: " + headData + " in file: " + GUI_ITEM_ARGS.getCurrentPath());
+                LightMaster.instance.getDebugPrinting().configError("Head data must be a valid UUID or name.");
+                LightMaster.instance.getDebugPrinting().configError("It is set to the backup material -> Stone");
+                return new ItemStack(Material.STONE, 1);
+            }
         }
 
         ItemMeta itemMeta = itemStack.getItemMeta();

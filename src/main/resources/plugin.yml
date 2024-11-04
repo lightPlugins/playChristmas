@@ -1,9 +1,9 @@
-name: lightModule
+name: playChristmas
 author: lightPlugins
 version: '${project.version}'
 main: io.lightplugins.christmas.LightMaster
 api-version: 1.21
-depend: ["PlaceholderAPI", "Vault"]
+depend: ["PlaceholderAPI"]
 softdepend: []
 loadbefore: []
 libraries: []
