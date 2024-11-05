@@ -24,7 +24,7 @@ public class PlaceholderManager extends PlaceholderExpansion {
 
     @Override
     public @NotNull String getIdentifier() {
-        return "lightStudio";
+        return "lightStudio_test";
     }
 
     @Override

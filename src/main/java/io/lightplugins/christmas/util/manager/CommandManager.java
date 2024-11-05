@@ -98,8 +98,8 @@ public class CommandManager implements CommandExecutor {
                 }
             }
 
-            if(command.getName().equals("eco")) {
-
+            if(command.getName().equals("advent")) {
+                // stuff
             }
 
         return false;

@@ -54,7 +54,7 @@ rewards:
     rewards:
       '0':
         id: give-item
-        data: 'diamond 1'
+        data: 'ecoitems:smaragd 1 model-data:1554'
     requirements:
       args:
         id: date

@@ -18,5 +18,6 @@ public class MessageParams {
     public String moduleReload() { return config.getString("moduleReload"); }
     public String reloadAll() { return config.getString("reloadAll"); }
     public String wrongSyntax() { return config.getString("wrongSyntax"); }
+    public String testSyntax() {return config.getString("testSyntax"); }
 
 }

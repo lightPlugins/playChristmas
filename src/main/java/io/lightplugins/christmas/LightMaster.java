@@ -35,7 +35,7 @@ public class LightMaster extends JavaPlugin {
     public static LightMaster instance;
 
     // Modules of the plugin
-    private LightAdventCalendar lightBank;
+    private LightAdventCalendar lightAdventCalendar;
     private LightSecretSanta lightSecretSanta;
     private LightSledHunt lightSledHunt;
 
@@ -105,7 +105,7 @@ public class LightMaster extends JavaPlugin {
     }
 
     private void loadModules() {
-        this.loadModule(lightBank, true);
+        this.loadModule(lightAdventCalendar, true);
         this.loadModule(lightSecretSanta, true);
         this.loadModule(lightSledHunt, true);
     }
@@ -131,12 +131,12 @@ public class LightMaster extends JavaPlugin {
 
     private void initModules() {
         // new instance of each module
-        this.lightBank = new LightAdventCalendar();
+        this.lightAdventCalendar = new LightAdventCalendar();
         this.lightSecretSanta = new LightSecretSanta();
         this.lightSledHunt = new LightSledHunt();
 
         // add modules to the map
-        this.modules.put(this.lightBank.getName(), this.lightBank);
+        this.modules.put(this.lightAdventCalendar.getName(), this.lightAdventCalendar);
         this.modules.put(this.lightSecretSanta.getName(), this.lightSecretSanta);
         this.modules.put(this.lightSledHunt.getName(), this.lightSledHunt);
     }

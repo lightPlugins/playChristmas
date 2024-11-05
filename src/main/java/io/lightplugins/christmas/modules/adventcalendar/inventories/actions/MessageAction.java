@@ -1,6 +1,7 @@
 package io.lightplugins.christmas.modules.adventcalendar.inventories.actions;
 
 import io.lightplugins.christmas.LightMaster;
+import io.lightplugins.christmas.modules.adventcalendar.LightAdventCalendar;
 import io.lightplugins.christmas.util.interfaces.LightAction;
 import org.bukkit.entity.Player;
 

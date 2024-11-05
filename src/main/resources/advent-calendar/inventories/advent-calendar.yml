@@ -11,11 +11,26 @@ contents:
   'a':
     id: gui_item
     args:
-      placeholders: [ ]
+      placeholders:
+        c: '50'
       item: 'bell 1 hide_attributes hide_enchants glow'
       head-data: ''
       display-name: '<gray>Adventskalender <#ffdc73>2024'
       lore:
+        - '#c#'
+        - '<gray>Hier kannst du jeden Tag ein'
+        - '<gray>neues <#ffdc73>Türchen öffnen!'
+      click-actions: [ ]
+  'c':
+    id: gui_item
+    args:
+      placeholders:
+        c: '50'
+      item: 'bell 1 hide_attributes hide_enchants glow'
+      head-data: ''
+      display-name: '<gray>Adventskalender <#ffdc73>2024'
+      lore:
+        - '#c#'
         - '<gray>Hier kannst du jeden Tag ein'
         - '<gray>neues <#ffdc73>Türchen öffnen!'
       click-actions: [ ]
@@ -29,7 +44,7 @@ contents:
       lore:
         - '<gray>Zurück zum Hauptmenü'
       click-actions:
-        - 'open;christmas-main'
+        - 'open;main-menu'
   '0':
     id: gui_item
     args:

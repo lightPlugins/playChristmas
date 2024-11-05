@@ -2,14 +2,17 @@ package io.lightplugins.christmas.modules.adventcalendar;
 
 import io.lightplugins.christmas.LightMaster;
 import io.lightplugins.christmas.modules.adventcalendar.commands.OpenAdventCalendarCommand;
+import io.lightplugins.christmas.modules.adventcalendar.commands.TestCommand;
 import io.lightplugins.christmas.modules.adventcalendar.config.MessageParams;
 import io.lightplugins.christmas.modules.adventcalendar.config.SettingParams;
 import io.lightplugins.christmas.modules.adventcalendar.listener.OnPlayerJoin;
 import io.lightplugins.christmas.util.SubCommand;
+import io.lightplugins.christmas.util.SubPlaceholder;
 import io.lightplugins.christmas.util.interfaces.LightModule;
 import io.lightplugins.christmas.util.manager.CommandManager;
 import io.lightplugins.christmas.util.manager.FileManager;
 import io.lightplugins.christmas.util.manager.InventoryManager;
+import io.lightplugins.christmas.util.manager.PlaceholderManager;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.command.PluginCommand;
@@ -25,6 +28,7 @@ public class LightAdventCalendar implements LightModule {
 
     public final String moduleName = "advent-calendar";
     private final ArrayList<SubCommand> subCommands = new ArrayList<>();
+    private final ArrayList<SubPlaceholder> subPlaceholders = new ArrayList<>();
 
     public SettingParams settingParams;
     public MessageParams messageParams;
@@ -40,6 +44,7 @@ public class LightAdventCalendar implements LightModule {
         LightMaster.instance.getDebugPrinting().print(LightMaster.instance.getConsolePrefix() +
                 "Starting " + this.moduleName + " module...");
         instance = this;
+        registerPlaceHolder();
         LightMaster.instance.getDebugPrinting().print(LightMaster.instance.getConsolePrefix() +
                 "Creating default files for module " + this.moduleName + " module...");
         initFiles();
@@ -95,10 +100,17 @@ public class LightAdventCalendar implements LightModule {
     private void initSubCommands() {
         PluginCommand ecoCommand = Bukkit.getPluginCommand("advent");
         subCommands.add(new OpenAdventCalendarCommand());
+        subCommands.add(new TestCommand());
         new CommandManager(ecoCommand, subCommands);
     }
 
     private void registerEvents() {
         Bukkit.getPluginManager().registerEvents(new OnPlayerJoin(), LightMaster.instance);
+    }
+
+    private void registerPlaceHolder() {
+        // subPlaceholders.add(new TestPlaceholder());
+        new PlaceholderManager(subPlaceholders);
+
     }
 }
