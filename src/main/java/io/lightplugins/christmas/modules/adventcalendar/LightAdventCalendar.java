@@ -2,7 +2,6 @@ package io.lightplugins.christmas.modules.adventcalendar;
 
 import io.lightplugins.christmas.LightMaster;
 import io.lightplugins.christmas.modules.adventcalendar.commands.OpenAdventCalendarCommand;
-import io.lightplugins.christmas.modules.adventcalendar.commands.TestCommand;
 import io.lightplugins.christmas.modules.adventcalendar.config.MessageParams;
 import io.lightplugins.christmas.modules.adventcalendar.config.SettingParams;
 import io.lightplugins.christmas.modules.adventcalendar.listener.OnPlayerJoin;
@@ -100,7 +99,6 @@ public class LightAdventCalendar implements LightModule {
     private void initSubCommands() {
         PluginCommand ecoCommand = Bukkit.getPluginCommand("advent");
         subCommands.add(new OpenAdventCalendarCommand());
-        subCommands.add(new TestCommand());
         new CommandManager(ecoCommand, subCommands);
     }
 

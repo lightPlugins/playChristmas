@@ -1,5 +1,5 @@
 gui-title: '<gray>Play<#ffdc73>Nayz <gray>Adventskalender <#ffdc73>2024'
-rows: 6
+rows: 3
 pattern:
   - '1100a0011'
   - '100000001'
@@ -12,12 +12,12 @@ contents:
     id: gui_item
     args:
       placeholders:
-        c: '50'
+        money: '%vault_money%'
       item: 'bell 1 hide_attributes hide_enchants glow'
       head-data: ''
       display-name: '<gray>Adventskalender <#ffdc73>2024'
       lore:
-        - '#c#'
+        - '#money#'
         - '<gray>Hier kannst du jeden Tag ein'
         - '<gray>neues <#ffdc73>Türchen öffnen!'
       click-actions: [ ]
@@ -44,7 +44,7 @@ contents:
       lore:
         - '<gray>Zurück zum Hauptmenü'
       click-actions:
-        - 'open;main-menu'
+        - 'close'
   '0':
     id: gui_item
     args:

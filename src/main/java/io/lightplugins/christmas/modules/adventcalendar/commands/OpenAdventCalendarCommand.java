@@ -1,17 +1,24 @@
 package io.lightplugins.christmas.modules.adventcalendar.commands;
 
-import io.lightplugins.christmas.modules.adventcalendar.LightAdventCalendar;
-import io.lightplugins.christmas.modules.adventcalendar.inventories.constructor.AdventCalendarInv;
+import com.comphenix.protocol.ProtocolLibrary;
+import com.comphenix.protocol.ProtocolManager;
+import com.comphenix.protocol.events.PacketContainer;
+import com.comphenix.protocol.wrappers.WrappedChatComponent;
+import com.comphenix.protocol.PacketType;
 import io.lightplugins.christmas.util.SubCommand;
-import io.lightplugins.christmas.util.constructor.InvConstructor;
+import org.bukkit.Material;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 public class OpenAdventCalendarCommand extends SubCommand {
+
+    private final ProtocolManager protocolManager = ProtocolLibrary.getProtocolManager();
+
     @Override
     public List<String> getName() {
         return List.of("open");
@@ -40,24 +47,44 @@ public class OpenAdventCalendarCommand extends SubCommand {
     @Override
     public TabCompleter registerTabCompleter() {
         return ((sender, command, alias, args) -> {
-
-            if(args.length == 1) {
+            if (args.length == 1) {
                 return List.of("open");
             }
-
             return null;
         });
     }
 
     @Override
     public boolean performAsPlayer(Player player, String[] args) throws ExecutionException, InterruptedException {
+        try {
+            // Create a new PacketContainer for the enchanting inventory
+            PacketContainer openWindowPacket = protocolManager.createPacket(PacketType.Play.Server.OPEN_WINDOW);
+            openWindowPacket.getIntegers().write(0, 1); // Window ID
+            openWindowPacket.getStrings().write(0, "minecraft:enchanting_table");
+            openWindowPacket.getChatComponents().write(0, WrappedChatComponent.fromText("Custom Enchanting"));
 
-        AdventCalendarInv adventCalendarInv =
-                LightAdventCalendar.instance.getInventoryManager().generateInventoryFromFileManager(
-                        LightAdventCalendar.instance.getAdventCalendar(), player);
-        adventCalendarInv.openInventory();
+            // Send the packet to the player
+            protocolManager.sendServerPacket(player, openWindowPacket);
 
-        return false;
+            // Set the item to be enchanted
+            ItemStack itemToEnchant = new ItemStack(Material.DIAMOND_SWORD);
+            player.getOpenInventory().getTopInventory().setItem(0, itemToEnchant);
+
+            // Create enchantment offers
+            PacketContainer enchantmentPacket = protocolManager.createPacket(PacketType.Play.Server.WINDOW_DATA);
+            enchantmentPacket.getIntegers().write(0, 1); // Window ID
+            enchantmentPacket.getIntegers().write(1, 0); // Enchantment slot
+            enchantmentPacket.getIntegers().write(2, 1); // Enchantment level
+            enchantmentPacket.getIntegers().write(3, 30); // Enchantment cost
+
+            // Send the enchantment offers to the player
+            protocolManager.sendServerPacket(player, enchantmentPacket);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return true;
     }
 
     @Override
