@@ -1,7 +1,7 @@
 package io.lightplugins.christmas.util.handler;
 
-import io.lightplugins.christmas.modules.adventcalendar.inventories.actions.InvCloseAction;
-import io.lightplugins.christmas.modules.adventcalendar.inventories.actions.MessageAction;
+import io.lightplugins.christmas.util.handler.actions.InvCloseAction;
+import io.lightplugins.christmas.util.handler.actions.MessageAction;
 import io.lightplugins.christmas.util.interfaces.LightAction;
 import org.bukkit.entity.Player;
 

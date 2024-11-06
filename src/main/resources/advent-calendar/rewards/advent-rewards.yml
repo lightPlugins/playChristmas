@@ -52,13 +52,11 @@ gui-items:
 rewards:
   '1':
     rewards:
-      '0':
-        id: give-item
-        data: 'diamond 1'
+      - 'give-item;diamond 1'
+      - 'send-message;<green>Du hast einen Diamanten erhalten.'
+      - 'close-inventory'
     requirements:
-      args:
-        id: date
-        data: '01.12.2024 00:00'
+      - 'date;01.12.2024 00:00'
   '2':
     rewards:
       args:

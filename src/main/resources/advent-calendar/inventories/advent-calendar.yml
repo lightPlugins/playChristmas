@@ -11,26 +11,11 @@ contents:
   'a':
     id: gui_item
     args:
-      placeholders:
-        money: '%vault_money%'
+      placeholders: [ ]
       item: 'bell 1 hide_attributes hide_enchants glow'
       head-data: ''
       display-name: '<gray>Adventskalender <#ffdc73>2024'
       lore:
-        - '#money#'
-        - '<gray>Hier kannst du jeden Tag ein'
-        - '<gray>neues <#ffdc73>Türchen öffnen!'
-      click-actions: [ ]
-  'c':
-    id: gui_item
-    args:
-      placeholders:
-        c: '50'
-      item: 'bell 1 hide_attributes hide_enchants glow'
-      head-data: ''
-      display-name: '<gray>Adventskalender <#ffdc73>2024'
-      lore:
-        - '#c#'
         - '<gray>Hier kannst du jeden Tag ein'
         - '<gray>neues <#ffdc73>Türchen öffnen!'
       click-actions: [ ]
