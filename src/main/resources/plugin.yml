@@ -3,7 +3,7 @@ author: lightPlugins
 version: '${project.version}'
 main: io.lightplugins.christmas.LightMaster
 api-version: 1.21
-depend: ["PlaceholderAPI", "ProtocolLib"]
+depend: ["PlaceholderAPI"]
 softdepend: []
 loadbefore: []
 libraries: []

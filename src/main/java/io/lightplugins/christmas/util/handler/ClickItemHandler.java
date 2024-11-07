@@ -50,6 +50,7 @@ public class ClickItemHandler {
 
     private final List<String> actionsSection;
     private final List<ActionHandler> actionHandlers = new ArrayList<>();
+    private int extraSlot = 4;
 
     // Extra requirements section for custom advent calendar plugin
     // This section is used for separate configuration data for example: rewards: -> '0' -> rewards: / requirements: ...
@@ -78,10 +79,6 @@ public class ClickItemHandler {
         translateLore();
         loadActions();
 
-        if(EXTRA_SECTION != null) {
-            readExtraRequirements();
-        }
-
     }
 
     /**
@@ -93,6 +90,7 @@ public class ClickItemHandler {
     public void setExtraSection(ConfigurationSection extraSection) {
         this.EXTRA_SECTION = extraSection;
         if(EXTRA_SECTION != null) {
+            this.extraSlot = EXTRA_SECTION.getInt("slot");
             readExtraRequirements();
             readExtraActions();
         }
@@ -291,6 +289,7 @@ public class ClickItemHandler {
                 action = action.replace("#" + key + "#", placeholders.get(key));
             }
             extraActionHandlers.add(new ActionHandler(player, action));
+            LightMaster.instance.getDebugPrinting().print("Extra action added: " + action);
         });
     }
 

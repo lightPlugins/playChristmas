@@ -37,7 +37,8 @@ public class RequirementHandler {
 
     public boolean checkRequirements() {
         if (requirementDataArray == null) {
-            return true;
+            LightMaster.instance.getDebugPrinting().print("RequirementHandler -> RequirementDataArray is null !!!");
+            return false;
         }
 
         LightRequirement lightRequirement = requirements.get(requirementDataArray[0]);

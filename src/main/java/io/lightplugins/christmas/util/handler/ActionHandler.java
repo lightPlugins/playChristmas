@@ -1,5 +1,7 @@
 package io.lightplugins.christmas.util.handler;
 
+import io.lightplugins.christmas.LightMaster;
+import io.lightplugins.christmas.util.handler.actions.GiveItemAction;
 import io.lightplugins.christmas.util.handler.actions.InvCloseAction;
 import io.lightplugins.christmas.util.handler.actions.MessageAction;
 import io.lightplugins.christmas.util.interfaces.LightAction;
@@ -33,7 +35,12 @@ public class ActionHandler {
 
     private static void initializeActions() {
         actions.put("message", new MessageAction());
-        actions.put("close", new InvCloseAction());
+        actions.put("close-inventory", new InvCloseAction());
+        actions.put("give-item", new GiveItemAction());
+    }
+
+    public String[] getActions() {
+        return actionDataArray;
     }
 
     public void handleAction() {

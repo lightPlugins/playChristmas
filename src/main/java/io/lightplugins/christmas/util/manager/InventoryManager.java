@@ -23,7 +23,7 @@ public class InventoryManager {
      * @return an InvCreator instance for the generated inventory
      */
 
-    public AdventCalendarInv generateInventoryFromFileManager(FileManager file, Player player) {
+    public AdventCalendarInv generateInventoryFromFileManager(FileManager file, FileManager extraFile, Player player) {
 
         FileConfiguration conf = file.getConfig();
         InvConstructor invConstructor = new InvConstructor();
@@ -40,13 +40,18 @@ public class InventoryManager {
         invConstructor.setPattern(pattern);
         invConstructor.setClickItemHandlersSection(clickContent);
 
-        return new AdventCalendarInv(invConstructor, player);
+        return new AdventCalendarInv(
+                invConstructor,
+                extraFile.getConfig().getConfigurationSection("rewards"),
+                extraFile.getConfig().getConfigurationSection("gui-items"),
+                player);
 
     }
 
-    public AdventCalendarInv generateInventoryFromFile(File file, Player player) {
+    public AdventCalendarInv generateInventoryFromFile(File file, File extraFile, Player player) {
 
         FileConfiguration conf = YamlConfiguration.loadConfiguration(file);
+        FileConfiguration extraConf = YamlConfiguration.loadConfiguration(extraFile);
         InvConstructor invConstructor = new InvConstructor();
 
         String guiName = file.getName().replace(".yml", "");
@@ -61,7 +66,11 @@ public class InventoryManager {
         invConstructor.setPattern(pattern);
         invConstructor.setClickItemHandlersSection(clickContent);
 
-        return new AdventCalendarInv(invConstructor, player);
+        return new AdventCalendarInv(
+                invConstructor,
+                extraConf.getConfigurationSection("gui-items"),
+                extraConf.getConfigurationSection("rewards"),
+                player);
 
     }
 }

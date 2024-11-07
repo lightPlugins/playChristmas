@@ -15,7 +15,7 @@ public class DateRequirement implements LightRequirement {
         try {
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy");
             Date date = simpleDateFormat.parse(requirementDataArray[1]);
-            return date.before(new Date());
+            return !date.after(new Date());
 
         } catch (ParseException e) {
             throw new RuntimeException("Error while parsing the date for requirement: " + requirementDataArray[1], e);

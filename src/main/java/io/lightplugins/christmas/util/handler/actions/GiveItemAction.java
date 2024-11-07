@@ -10,7 +10,15 @@ public class GiveItemAction implements LightAction {
     @Override
     public void execute(Player player, String[] actionDataArray) {
 
-        ItemStack itemStack = new ItemStack(Material.valueOf(actionDataArray[1]), Integer.parseInt(actionDataArray[2]));
+        String[] seperatedData = actionDataArray[1].split(" ");
+        ItemStack itemStack = new ItemStack(Material.valueOf(seperatedData[0].toUpperCase()), Integer.parseInt(seperatedData[1]));
+
+        // check if the player has a full inventory
+        if(player.getInventory().firstEmpty() == -1) {
+            player.getWorld().dropItem(player.getLocation(), itemStack);
+        } else {
+            player.getInventory().addItem(itemStack);
+        }
 
     }
 }
