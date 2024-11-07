@@ -15,11 +15,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Getter
-public class RewardHandler {
+public class AdventHandler {
 
     private final ConfigurationSection REWARD_ARGS;
     private final ConfigurationSection REQUIREMENT_ARGS;
     private final ConfigurationSection CLICK_ITEM_ARGS;
+    private ClickItemHandler clickItemHandler;
     private ItemStack clickItem;
     private ItemMeta clickItemMeta;
     private final Player player;
@@ -30,7 +31,7 @@ public class RewardHandler {
     private final List<ActionHandler> actionHandler = new ArrayList<>();
     private final List<RequirementHandler> requirementHandler = new ArrayList<>();
 
-    public RewardHandler(ConfigurationSection rewardSection, ConfigurationSection itemSection, Player player) {
+    public AdventHandler(ConfigurationSection rewardSection, ConfigurationSection itemSection, Player player) {
         this.REWARD_ARGS = rewardSection.getConfigurationSection("rewards");
         this.REQUIREMENT_ARGS = rewardSection.getConfigurationSection("requirements");
         this.player = player;
@@ -38,20 +39,16 @@ public class RewardHandler {
         this.actionList = rewardSection.getStringList("rewards");
         this.requirementList = rewardSection.getStringList("requirements");
 
-        // Read the click items
         readClickItem();
-        // Load the actions
         loadActions();
-        // Load the requirements
         loadRequirements();
-        // Check if the configuration is valid or create default values
         validate();
 
     }
 
     private void readClickItem() {
 
-        ClickItemHandler clickItemHandler = new ClickItemHandler(CLICK_ITEM_ARGS, player);
+        this.clickItemHandler = new ClickItemHandler(CLICK_ITEM_ARGS, player);
         clickItem = clickItemHandler.getGuiItem();
 
         if(clickItem == null) {

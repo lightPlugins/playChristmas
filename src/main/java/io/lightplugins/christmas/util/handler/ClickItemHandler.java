@@ -39,6 +39,7 @@ public class ClickItemHandler {
 
     private final ConfigurationSection GUI_ITEM_ARGS;
     private final ConfigurationSection PLACEHOLDERS;
+    private ConfigurationSection EXTRA_SECTION;
     private final Player player;
     private String item;
     private String displayName;
@@ -46,8 +47,17 @@ public class ClickItemHandler {
     private final Map<String, String> placeholders = new HashMap<>();
     private int modelData;
     private String headData;
+
     private final List<String> actionsSection;
     private final List<ActionHandler> actionHandlers = new ArrayList<>();
+
+    // Extra requirements section for custom advent calendar plugin
+    // This section is used for separate configuration data for example: rewards: -> '0' -> rewards: / requirements: ...
+    private List<String> extraRequirementsSection;
+    private final List<RequirementHandler> extraRequirementHandlers = new ArrayList<>();
+
+    private List<String> extraActionsSection;
+    private final List<ActionHandler> extraActionHandlers = new ArrayList<>();
 
     /**
      * Constructs a new ClickItemHandler.
@@ -68,6 +78,24 @@ public class ClickItemHandler {
         translateLore();
         loadActions();
 
+        if(EXTRA_SECTION != null) {
+            readExtraRequirements();
+        }
+
+    }
+
+    /**
+     * Sets the extra section for the ClickItemHandler.
+     * The extra section is used for separate configuration data for example rewards: ...
+     *
+     * @param extraSection the extra section to set
+     */
+    public void setExtraSection(ConfigurationSection extraSection) {
+        this.EXTRA_SECTION = extraSection;
+        if(EXTRA_SECTION != null) {
+            readExtraRequirements();
+            readExtraActions();
+        }
     }
 
     /**
@@ -231,4 +259,39 @@ public class ClickItemHandler {
             actionHandlers.add(new ActionHandler(player, action));
         });
     }
+
+
+    /**
+     * Reads and processes extra requirements from the extraRequirementsSection list.
+     * Iterates through each requirement, replaces placeholders with their corresponding values,
+     * and adds the processed requirement to the extraRequirementHandlers list.
+     */
+    private void readExtraRequirements() {
+
+        this.extraRequirementsSection = EXTRA_SECTION.getStringList("requirements");
+
+        extraRequirementsSection.forEach(requirement -> {
+            for(String key : placeholders.keySet()) {
+                requirement = requirement.replace("#" + key + "#", placeholders.get(key));
+            }
+            extraRequirementHandlers.add(new RequirementHandler(player, requirement));
+        });
+    }
+
+    /**
+     * Reads and processes extra actions from the extraActionsSection list.
+     * Iterates through each action, replaces placeholders with their corresponding values,
+     * and adds the processed action to the extraActionHandlers list.
+     */
+    private void readExtraActions() {
+        this.extraActionsSection = EXTRA_SECTION.getStringList("actions");
+
+        extraActionsSection.forEach(action -> {
+            for(String key : placeholders.keySet()) {
+                action = action.replace("#" + key + "#", placeholders.get(key));
+            }
+            extraActionHandlers.add(new ActionHandler(player, action));
+        });
+    }
+
 }
