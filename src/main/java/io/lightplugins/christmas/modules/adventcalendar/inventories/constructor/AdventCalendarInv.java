@@ -125,6 +125,7 @@ public class AdventCalendarInv {
             List<RequirementHandler> requirementHandlers = new AdventManager().getDayRequirements(
                     rewardSection.getStringList(rewardKey + ".requirements"), player);
 
+            // The final ClickItemHandler used for the click event.
             ClickItemHandler finalClickHandler;
 
             boolean allRequirementsMet = true;
