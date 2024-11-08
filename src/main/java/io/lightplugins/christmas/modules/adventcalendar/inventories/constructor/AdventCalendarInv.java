@@ -31,6 +31,18 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * AdventCalendarInv
+ * This class is used to create the Advent Calendar GUI
+ * Every day in December has a reward that the player can claim
+ * by clicking on the available item in the GUI.
+ * <p>
+ * Author: lightPlugins
+ * Copyright: © 2023 [lightStudios]. All rights reserved.
+ * You may not use, distribute, or modify this code without explicit permission.
+ *  </p>
+ */
+
 public class AdventCalendarInv {
 
     private final ChestGui gui = new ChestGui(6, "Init");
@@ -45,6 +57,14 @@ public class AdventCalendarInv {
     private final int cooldownTime = 3;
     private final int failCooldownTime = 20;
 
+    /**
+     * Constructor for the AdventCalendarInv
+     * @param invConstructor InvConstructor - The constructor for the inventory
+     * @param extraSection ConfigurationSection - The section for the rewards
+     * @param extraItemSection ConfigurationSection - The section for the extra items
+     * @param player Player - The player to open the inventory for
+     */
+
     public AdventCalendarInv(
             InvConstructor invConstructor,
             ConfigurationSection extraSection,
@@ -57,6 +77,10 @@ public class AdventCalendarInv {
         this.player = player;
     }
 
+    /**
+     * Open the inventory
+     * This method is used to open the Advent Calendar GUI
+     */
     public void openInventory() {
 
         gui.setRows(invConstructor.getRows());
@@ -79,8 +103,10 @@ public class AdventCalendarInv {
     }
 
 
-    //
-
+    /**
+     * Get the extra pane
+     * @return StaticPane for the extra items (day rewards)
+     */
     @NotNull
     private StaticPane getExtraPane() {
 
@@ -188,11 +214,13 @@ public class AdventCalendarInv {
                     }
                 }
 
+                // Check if all requirements are met before claiming
                 if(!allMet) {
                     if(!failCooldown.contains(player)) {
                         LightMaster.instance.getMessageSender().sendPlayerMessage(
                                 LightAdventCalendar.instance.getMessageParams().requirementFail(), player);
                         SoundUtil.onFail(player);
+                        // AntiSpam protection for fail actions
                         failCooldown.add(player);
                         Bukkit.getScheduler().runTaskLater(LightMaster.instance, () -> {
                             failCooldown.remove(player);
@@ -202,11 +230,13 @@ public class AdventCalendarInv {
                     return;
                 }
 
+                //  Check if the player has already claimed the reward
                 if(finalHasClaimed) {
                     if(!failCooldown.contains(player)) {
                         LightMaster.instance.getMessageSender().sendPlayerMessage(
                                 LightAdventCalendar.instance.getMessageParams().alreadyClaimed(), player);
                         SoundUtil.onFail(player);
+                        // AntiSpam protection for fail actions
                         failCooldown.add(player);
                         Bukkit.getScheduler().runTaskLater(LightMaster.instance, () -> {
                             failCooldown.remove(player);
@@ -216,7 +246,7 @@ public class AdventCalendarInv {
                     return;
                 }
 
-
+                // Claim the reward and add the date to the claimed dates
                 LightAdventCalendar.instance.getAdventPlayerData().stream()
                         .filter(adventPlayer -> adventPlayer.hasPlayerDataFile(player.getUniqueId().toString()))
                         .forEach(adventPlayer -> adventPlayer.addClaimedDate(finalDate));
@@ -228,6 +258,7 @@ public class AdventCalendarInv {
                 SoundUtil.onSuccess(player);
 
                 clickCooldown.add(player);
+                // force update the GUI
                 update();
             }), slot);
         }
@@ -235,6 +266,10 @@ public class AdventCalendarInv {
         return staticPane;
     }
 
+    /**
+     * Get the pattern pane
+     * @return PatternPane for the deco items
+     */
     @NotNull
     private PatternPane getPatternPane() {
 
@@ -256,7 +291,7 @@ public class AdventCalendarInv {
                     return;
                 }
 
-                // Anti-Spam protection
+                // AntiSpam protection for general actions
                 if(clickCooldown.contains(player)) {
                     return;
                 }
@@ -265,6 +300,7 @@ public class AdventCalendarInv {
                     clickCooldown.remove(player);
                 }, cooldownTime);
 
+                // execute the actions from the clickItemHandler -> file
                 clickItemHandler.getActionHandlers().forEach(ActionHandler::handleAction);
                 clickCooldown.add(player);
             }));
@@ -274,6 +310,10 @@ public class AdventCalendarInv {
         return patternPane;
     }
 
+    /**
+     * Update the GUI
+     * This method is used to update the GUI after a player has claimed a reward
+     */
     private void update() {
 
         gui.getPanes().forEach(Pane::clear);
@@ -283,30 +323,4 @@ public class AdventCalendarInv {
 
         gui.update();
     }
-
-    // currently toggled - enable this for refreshing the GUI
-    private void refreshGui() {
-        // gui.setTitle(invConstructor.getGuiTitle());
-
-        // Clear existing items in the pattern pane
-        PatternPane patternPane = (PatternPane) gui.getPanes().getFirst();
-        patternPane.clear();
-
-        // Re-add items to the pattern pane
-        for (String patternIdentifier : invConstructor.getClickItemHandlersSection().getKeys(false)) {
-            ClickItemHandler clickItemHandler = new ClickItemHandler(
-                    Objects.requireNonNull(invConstructor.getClickItemHandlersSection().getConfigurationSection(
-                            patternIdentifier)), player);
-
-            ItemStack itemStack = clickItemHandler.getGuiItem();
-            patternPane.bindItem(patternIdentifier.charAt(0), new GuiItem(itemStack));
-            // TODO: Add Click Event after item refreshing
-            // Maybe update only the Items, not the PatternPane
-            clickItemHandler.getActionHandlers().forEach(ActionHandler::handleAction);
-        }
-
-        gui.update();
-        LightMaster.instance.getDebugPrinting().print("GUI refreshed");
-    }
-
 }
