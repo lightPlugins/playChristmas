@@ -154,6 +154,7 @@ public class AdventCalendarInv {
             }
 
             ClickItemHandler tempClickHandler = finalClickHandler;
+            Date finalDate = date;
             staticPane.addItem(new GuiItem(finalClickHandler.getGuiItem(), inventoryClickEvent -> {
 
                 if(!inventoryClickEvent.isLeftClick()) {
@@ -180,6 +181,10 @@ public class AdventCalendarInv {
                     LightMaster.instance.getMessageSender().sendPlayerMessage("requirements-not-met", player);
                     return;
                 }
+
+                LightAdventCalendar.instance.getAdventPlayerData().stream()
+                        .filter(adventPlayer -> adventPlayer.hasPlayerDataFile(player.getUniqueId().toString()))
+                        .forEach(adventPlayer -> adventPlayer.addClaimedDate(finalDate));
 
                 tempClickHandler.getExtraActionHandlers().forEach(ActionHandler::handleAction);
                 clickCooldown.add(player);

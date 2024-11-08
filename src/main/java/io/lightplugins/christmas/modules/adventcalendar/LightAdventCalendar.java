@@ -43,25 +43,25 @@ public class LightAdventCalendar implements LightModule {
 
     @Override
     public void enable() {
-        LightMaster.instance.getDebugPrinting().print(LightMaster.instance.getConsolePrefix() +
+        LightMaster.instance.getDebugPrinting().print(
                 "Starting " + this.moduleName + " module...");
         instance = this;
         registerPlaceHolder();
-        LightMaster.instance.getDebugPrinting().print(LightMaster.instance.getConsolePrefix() +
+        LightMaster.instance.getDebugPrinting().print(
                 "Creating default files for module " + this.moduleName + " module...");
         initFiles();
         settingParams = new SettingParams(this);
-        LightMaster.instance.getDebugPrinting().print(LightMaster.instance.getConsolePrefix() +
+        LightMaster.instance.getDebugPrinting().print(
                 "Selecting module language for module " + this.moduleName + "...");
         selectLanguage();
         messageParams = new MessageParams(language);
-        LightMaster.instance.getDebugPrinting().print(LightMaster.instance.getConsolePrefix() +
+        LightMaster.instance.getDebugPrinting().print(
                 "Registering subcommands for module " + this.moduleName + "...");
         initSubCommands();
         registerEvents();
         this.inventoryManager = new InventoryManager();
         this.isModuleEnabled = true;
-        LightMaster.instance.getDebugPrinting().print(LightMaster.instance.getConsolePrefix() +
+        LightMaster.instance.getDebugPrinting().print(
                 "Successfully started module " + this.moduleName + "!");
 
     }
@@ -97,7 +97,7 @@ public class LightAdventCalendar implements LightModule {
         try {
             // load player data multi file manager
             this.playerDataFiles = new MultiFileManager(
-                    "plugins/lightInventory/" + moduleName + "/storage/player-data/");
+                    "plugins/" + LightMaster.instance.getPluginName() + "/" + moduleName + "/storage/player-data/");
         } catch (IOException e) {
             throw new RuntimeException("Error reading player data files for module: " + moduleName, e);
         }

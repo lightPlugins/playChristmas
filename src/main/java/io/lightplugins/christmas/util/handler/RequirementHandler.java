@@ -7,6 +7,7 @@ import io.lightplugins.christmas.util.interfaces.LightRequirement;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -35,9 +36,12 @@ public class RequirementHandler {
 
     public static void initializeRequirements() {
         requirements.put("date", new DateRequirement());
-
     }
 
+    /**
+     * Check if the requirements are met.
+     * @return True if the requirements are met, false otherwise.
+     */
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public boolean checkRequirements() {
         if (requirementDataArray == null) {
@@ -57,6 +61,10 @@ public class RequirementHandler {
         return false;
     }
 
+    /**
+     * Get the date requirement from the requirement data array if the requirement is a date.
+     * @return The date requirement or null if the requirement is not a date.
+     */
     public Date getDateRequirement() {
         if (requirementDataArray == null || !requirementDataArray[0].equals("date")) {
             return null;

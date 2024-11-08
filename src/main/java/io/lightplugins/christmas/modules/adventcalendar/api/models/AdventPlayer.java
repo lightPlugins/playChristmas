@@ -9,6 +9,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 public class AdventPlayer {
@@ -21,6 +22,8 @@ public class AdventPlayer {
         this.playerDataFile = playerDataFile;
 
         loadClaimedDates();
+        initNewPlayer();
+
     }
 
     public boolean hasPlayerDataFile(String uuid) {
@@ -28,9 +31,9 @@ public class AdventPlayer {
     }
 
 
-    private void initNewPlayer(String uuid) {
+    private void initNewPlayer() {
 
-        if(hasPlayerDataFile(uuid)) {
+        if(!claimedDates.isEmpty()) {
             return;
         }
         // Generate data into the player storage file
@@ -63,13 +66,16 @@ public class AdventPlayer {
     }
 
     public void addClaimedDate(Date date) {
-        if(hasClaimed(date)) {
+        if (hasClaimed(date)) {
             return;
         }
         claimedDates.add(date);
 
         FileConfiguration config = YamlConfiguration.loadConfiguration(playerDataFile);
-        config.set("claimed-dates." + dateFormat.format(date), dateFormat.format(date));
+        List<String> formattedDates = claimedDates.stream()
+                .map(dateFormat::format)
+                .collect(Collectors.toList());
+        config.set("claimed-dates", formattedDates);
 
         try {
             config.save(playerDataFile);

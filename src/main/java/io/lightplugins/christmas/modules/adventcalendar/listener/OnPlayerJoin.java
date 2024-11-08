@@ -13,17 +13,24 @@ import java.io.IOException;
 public class OnPlayerJoin implements Listener {
 
     @EventHandler
-    public void onJoin (PlayerJoinEvent event) {
+    public void onJoin(PlayerJoinEvent event) {
+
+        // load or create player data file on player join
 
         Player player = event.getPlayer();
 
-        // create new player storage file
+        // create new player storage file if not already existing
         try {
             File file = LightAdventCalendar.instance.getPlayerDataFiles().createFile(player.getUniqueId().toString());
-            new AdventPlayer(player, file);
+
+            for(AdventPlayer adventPlayer : LightAdventCalendar.instance.getAdventPlayerData()) {
+                if(adventPlayer.hasPlayerDataFile(player.getUniqueId().toString())) {
+                    return;
+                }
+            }
+            new AdventPlayer(file);
         } catch (IOException e) {
             throw new RuntimeException("Error creating player data file for player: " + player.getName(), e);
         }
-
     }
 }
