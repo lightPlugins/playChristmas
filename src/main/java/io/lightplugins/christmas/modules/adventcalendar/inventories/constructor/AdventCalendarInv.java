@@ -96,12 +96,10 @@ public class AdventCalendarInv {
             }
         });
 
-
         gui.addPane(getExtraPane());
         gui.addPane(getPatternPane());
         gui.show(player);
     }
-
 
     /**
      * Get the extra pane
