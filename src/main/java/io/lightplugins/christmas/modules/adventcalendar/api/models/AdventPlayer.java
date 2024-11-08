@@ -3,7 +3,6 @@ package io.lightplugins.christmas.modules.adventcalendar.api.models;
 import lombok.Getter;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Player;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -14,16 +13,34 @@ import java.util.List;
 @Getter
 public class AdventPlayer {
 
-    private final Player player;
     private final List<Date> claimedDates = new ArrayList<>();
     private final File playerDataFile;
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm");
 
-    public AdventPlayer(Player player, File playerDataFile) {
-        this.player = player;
+    public AdventPlayer(File playerDataFile) {
         this.playerDataFile = playerDataFile;
 
         loadClaimedDates();
+    }
+
+    public boolean hasPlayerDataFile(String uuid) {
+        return playerDataFile.getName().equalsIgnoreCase(uuid + ".yml");
+    }
+
+
+    private void initNewPlayer(String uuid) {
+
+        if(hasPlayerDataFile(uuid)) {
+            return;
+        }
+        // Generate data into the player storage file
+        FileConfiguration config = YamlConfiguration.loadConfiguration(playerDataFile);
+        try {
+            config.set("claimed-dates", new ArrayList<>());
+            config.save(playerDataFile);
+        } catch (Exception e) {
+            throw new RuntimeException("Error saving player data file for player", e);
+        }
     }
 
     private void loadClaimedDates() {
@@ -35,22 +52,9 @@ public class AdventPlayer {
                 try {
                     claimedDates.add(dateFormat.parse(config.getString("claimed-dates." + date)));
                 } catch (Exception e) {
-                    throw new RuntimeException("Error parsing date: " + date + " for player: " + player.getName(), e);
+                    throw new RuntimeException("Error parsing date: " + date, e);
                 }
             });
-        }
-    }
-
-    public void createNewPlayerFile() {
-        // Create new player data file
-        FileConfiguration config = YamlConfiguration.loadConfiguration(playerDataFile);
-
-        config.set("claimed-dates", new ArrayList<>());
-
-        try {
-            config.save(playerDataFile);
-        } catch (Exception e) {
-            throw new RuntimeException("Error saving player data file for player: " + player.getName(), e);
         }
     }
 
@@ -59,10 +63,19 @@ public class AdventPlayer {
     }
 
     public void addClaimedDate(Date date) {
-        if(!hasClaimed(date)) {
+        if(hasClaimed(date)) {
             return;
         }
         claimedDates.add(date);
+
+        FileConfiguration config = YamlConfiguration.loadConfiguration(playerDataFile);
+        config.set("claimed-dates." + dateFormat.format(date), dateFormat.format(date));
+
+        try {
+            config.save(playerDataFile);
+        } catch (Exception e) {
+            throw new RuntimeException("Error saving claimed date: " + date, e);
+        }
     }
 
 

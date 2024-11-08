@@ -1,6 +1,7 @@
 package io.lightplugins.christmas.modules.adventcalendar;
 
 import io.lightplugins.christmas.LightMaster;
+import io.lightplugins.christmas.modules.adventcalendar.api.models.AdventPlayer;
 import io.lightplugins.christmas.modules.adventcalendar.commands.OpenAdventCalendarCommand;
 import io.lightplugins.christmas.modules.adventcalendar.config.MessageParams;
 import io.lightplugins.christmas.modules.adventcalendar.config.SettingParams;
@@ -13,6 +14,7 @@ import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.command.PluginCommand;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -26,6 +28,7 @@ public class LightAdventCalendar implements LightModule {
     public final String moduleName = "advent-calendar";
     private final ArrayList<SubCommand> subCommands = new ArrayList<>();
     private final ArrayList<SubPlaceholder> subPlaceholders = new ArrayList<>();
+    private final ArrayList<AdventPlayer> adventPlayerData = new ArrayList<>();
 
     public SettingParams settingParams;
     public MessageParams messageParams;
@@ -95,8 +98,12 @@ public class LightAdventCalendar implements LightModule {
             // load player data multi file manager
             this.playerDataFiles = new MultiFileManager(
                     "plugins/lightInventory/" + moduleName + "/storage/player-data/");
-        }catch (IOException e) {
+        } catch (IOException e) {
             throw new RuntimeException("Error reading player data files for module: " + moduleName, e);
+        }
+
+        for(File file : playerDataFiles.getYamlFiles()) {
+            adventPlayerData.add(new AdventPlayer(file));
         }
     }
 

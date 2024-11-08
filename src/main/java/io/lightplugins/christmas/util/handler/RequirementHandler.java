@@ -8,6 +8,9 @@ import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.entity.Player;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -52,6 +55,21 @@ public class RequirementHandler {
         LightMaster.instance.getDebugPrinting().print("-> RequirementHandler -> LightRequirement is null");
         LightMaster.instance.getDebugPrinting().print("Activate fallback system. All requirements are now FALSE.");
         return false;
+    }
+
+    public Date getDateRequirement() {
+        if (requirementDataArray == null || !requirementDataArray[0].equals("date")) {
+            return null;
+        }
+
+        String dateString = requirementDataArray[1];
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm");
+        try {
+            return dateFormat.parse(dateString);
+        } catch (ParseException e) {
+            LightMaster.instance.getDebugPrinting().configError("Invalid date format in the config: " + dateString);
+            return null;
+        }
     }
 
 

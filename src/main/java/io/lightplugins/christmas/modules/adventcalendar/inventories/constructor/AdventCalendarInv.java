@@ -7,7 +7,9 @@ import com.github.stefvanschie.inventoryframework.pane.StaticPane;
 import com.github.stefvanschie.inventoryframework.pane.util.Pattern;
 import com.github.stefvanschie.inventoryframework.pane.util.Slot;
 import io.lightplugins.christmas.LightMaster;
+import io.lightplugins.christmas.modules.adventcalendar.LightAdventCalendar;
 import io.lightplugins.christmas.modules.adventcalendar.api.manager.AdventManager;
+import io.lightplugins.christmas.modules.adventcalendar.api.models.AdventPlayer;
 import io.lightplugins.christmas.util.constructor.InvConstructor;
 import io.lightplugins.christmas.util.handler.ActionHandler;
 import io.lightplugins.christmas.util.handler.ClickItemHandler;
@@ -16,10 +18,14 @@ import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -94,14 +100,33 @@ public class AdventCalendarInv {
             ClickItemHandler finalClickHandler;
 
             boolean allRequirementsMet = true;
+            Date date = null;
             for (RequirementHandler requirementHandler : requirementHandlers) {
+                date = requirementHandler.getDateRequirement();
                 if (!requirementHandler.checkRequirements()) {
                     allRequirementsMet = false;
                     break;
                 }
             }
 
-            if (allRequirementsMet) {
+            boolean hasClaimed = false;
+            if(date != null) {
+                for(AdventPlayer adventPlayer : LightAdventCalendar.instance.getAdventPlayerData()) {
+
+                    if(!adventPlayer.hasPlayerDataFile(player.getUniqueId().toString())) {
+                        continue;
+                    }
+
+                    if(adventPlayer.hasClaimed(date)) {
+                        hasClaimed = true;
+                        break;
+                    }
+                }
+            }
+
+            if (hasClaimed) {
+                finalClickHandler = alreadyClaimedClickHandler;
+            } else if (allRequirementsMet) {
                 finalClickHandler = readyClickHandler;
             } else {
                 finalClickHandler = notReadyClickHandler;
@@ -111,6 +136,22 @@ public class AdventCalendarInv {
 
             int day = Integer.parseInt(rewardKey);
             Slot slot = Slot.fromIndex(finalClickHandler.getExtraSlot());
+
+            // replace placeholders in lore
+            List<String> itemLore = finalClickHandler.getLore();
+            List<String> translatedLore = new ArrayList<>();
+
+            for(String loreLine : itemLore) {
+                translatedLore.add(loreLine.replace("#day#", String.valueOf(day)
+                        .replace("#date#", new SimpleDateFormat("dd.MM.yyyy HH.mm").format(date))));
+            }
+
+            ItemMeta im = finalClickHandler.getGuiItem().getItemMeta();
+
+            if(im != null) {
+                im.setLore(translatedLore);
+                finalClickHandler.getGuiItem().setItemMeta(im);
+            }
 
             ClickItemHandler tempClickHandler = finalClickHandler;
             staticPane.addItem(new GuiItem(finalClickHandler.getGuiItem(), inventoryClickEvent -> {

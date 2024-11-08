@@ -50,17 +50,17 @@ public class MultiFileManager {
         return fileName;
     }
 
-    public boolean createFile(String fileName) throws IOException {
+    public File createFile(String fileName) throws IOException {
         File file = new File(directoryPath + File.separator + fileName + ".yml");
         if (!file.exists()) {
             if (file.createNewFile()) {
                 yamlFiles.add(file);
-                return true;
+                return file;
             } else {
                 throw new IOException("Failed to create file: " + fileName);
             }
         }
-        return false;
+        return null;
     }
 
     public boolean deleteFile(String fileName) throws IOException {
