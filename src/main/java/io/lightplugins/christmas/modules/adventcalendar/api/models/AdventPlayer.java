@@ -25,7 +25,6 @@ public class AdventPlayer {
         initNewPlayer();
         loadClaimedDates();
 
-
     }
 
     public boolean hasPlayerDataFile(String uuid) {
@@ -103,10 +102,4 @@ public class AdventPlayer {
             throw new RuntimeException("Error saving player data file for player", e);
         }
     }
-
-
-
-
-
-
 }
