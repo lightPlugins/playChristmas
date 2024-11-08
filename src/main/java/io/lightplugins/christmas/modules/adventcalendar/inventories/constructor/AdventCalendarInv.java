@@ -153,9 +153,9 @@ public class AdventCalendarInv {
                 }
             }
 
-            if (hasClaimed) {
+            if(hasClaimed) {
                 finalClickHandler = alreadyClaimedClickHandler;
-            } else if (allRequirementsMet) {
+            } else if(allRequirementsMet) {
                 finalClickHandler = readyClickHandler;
             } else {
                 finalClickHandler = notReadyClickHandler;
