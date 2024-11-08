@@ -250,6 +250,8 @@ public class AdventCalendarInv {
                         .filter(adventPlayer -> adventPlayer.hasPlayerDataFile(player.getUniqueId().toString()))
                         .forEach(adventPlayer -> adventPlayer.addClaimedDate(finalDate));
 
+                // execute the "extra" actions from the clickItemHandler -> file
+                // "extra" actions are exclusive to the Advent Calendar
                 tempClickHandler.getExtraActionHandlers().forEach(ActionHandler::handleAction);
                 LightMaster.instance.getMessageSender().sendPlayerMessage(
                         LightAdventCalendar.instance.getMessageParams().successClaim()
