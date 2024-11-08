@@ -48,6 +48,9 @@ public class ClickItemHandler {
     private int modelData;
     private String headData;
 
+    private ItemStack itemStack;
+    private ItemMeta itemMeta;
+
     private final List<String> actionsSection;
     private final List<ActionHandler> actionHandlers = new ArrayList<>();
     private int extraSlot = 4;
@@ -78,6 +81,9 @@ public class ClickItemHandler {
         translatePlaceholders();
         translateLore();
         loadActions();
+
+        this.itemStack = getGuiItem();
+        this.itemMeta = itemStack.getItemMeta();
 
     }
 

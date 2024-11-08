@@ -1,5 +1,5 @@
 gui-title: '<gray>Play<#ffdc73>Nayz <gray>Adventskalender <#ffdc73>2024'
-rows: 3
+rows: 6
 pattern:
 #    0123456789
   - '1100a0011' #0

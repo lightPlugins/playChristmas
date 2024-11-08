@@ -22,7 +22,6 @@ public class OnPlayerJoin implements Listener {
 
         // create new player storage file if not already existing
         try {
-            File file = LightAdventCalendar.instance.getPlayerDataFiles().createFile(player.getUniqueId().toString());
 
             for(AdventPlayer adventPlayer : LightAdventCalendar.instance.getAdventPlayerData()) {
                 if(adventPlayer.hasPlayerDataFile(player.getUniqueId().toString())) {
@@ -31,8 +30,10 @@ public class OnPlayerJoin implements Listener {
                 }
             }
 
+            File file = LightAdventCalendar.instance.getPlayerDataFiles().createFile(player.getUniqueId().toString());
+
             LightMaster.instance.getDebugPrinting().print("Creating player data file for player: " + player.getName());
-            new AdventPlayer(file);
+            LightAdventCalendar.instance.getAdventPlayerData().add(new AdventPlayer(file));
         } catch (IOException e) {
             throw new RuntimeException("Error creating player data file for player: " + player.getName(), e);
         }

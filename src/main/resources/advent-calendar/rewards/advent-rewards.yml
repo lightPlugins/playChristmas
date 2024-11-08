@@ -10,26 +10,26 @@ gui-items:
       display-name: '<gray>Tag <#ffdc73>#day# <gray>- <dark_gray>#date#'
       lore:
         - ' '
-        - 'Belohnungen:'
-        - '- #rewards#'
+        - '<gray>Belohnungen:'
+        - '<gray>- <#ffdc73>#rewards#'
         - ' '
-        - '<gray>Du kannst dieses Geschenk'
-        - '<gray>noch nicht abholen.'
+        - '<red>[!]<gray> Du kannst dieses Geschenk'
+        - '     <red>noch nicht abholen.'
       click-actions:
         - 'sound;ENTITY_VILLAGER_NO:1.0:1.0'
   ready:
     id: gui_item
     args:
       placeholders: [ ]
-      item: 'yellow_stained_glass_pane #day# hide_attributes hide_enchantments glow'
+      item: 'yellow_stained_glass_pane #day# hide_attributes hide_enchants glow'
       head-data: ''
-      display-name: '<gray>Tag <#ffdc73>1 <gray>- <dark_gray>01.12.2024'
+      display-name: '<gray>Tag <#ffdc73>#day# <gray>- <dark_gray>#date#'
       lore:
         - ' '
-        - 'Belohnungen:'
-        - '- #rewards#'
+        - '<gray>Belohnungen:'
+        - '<gray>- <#ffdc73>#rewards#'
         - ' '
-        - '<gray>Klicke, um das Geschenk'
+        - '<#ffdc73>[!] <gray>Klicke, um das Geschenk zu erhalten.'
       click-actions:
         - 'claim-day'
         - 'sound;ENTITY_PLAYER_LEVELUP:1.0:1.0'
@@ -39,14 +39,14 @@ gui-items:
       placeholders: [ ]
       item: 'green_stained_glass_pane #day# hide_attributes'
       head-data: ''
-      display-name: '<gray>Tag <#ffdc73>1 <gray>- <dark_gray>01.12.2024'
+      display-name: '<gray>Tag <#ffdc73>#day# <gray>- <dark_gray>#date#'
       lore:
         - ' '
-        - 'Belohnungen:'
-        - '- #rewards#'
+        - '<gray>Belohnungen:'
+        - '<gray>- <#ffdc73>#rewards#'
         - ' '
-        - '<gray>Du hast dieses Geschenk'
-        - '<gray>bereits abgeholt.'
+        - '<red>[!] <gray>Du hast dieses Geschenk'
+        - '     <gray>bereits abgeholt.'
       click-actions:
         - 'sound;ENTITY_VILLAGER_NO:1.0:1.0'
 rewards:
@@ -55,30 +55,166 @@ rewards:
     actions:
       - 'give-item;diamond 1'
       - 'send-message;<green>Du hast einen Diamanten erhalten.'
-      - 'close-inventory'
     requirements:
-      - 'date;07.11.2024 00:00'
+      - 'date;01.11.2024 00:00'
   '2':
     slot: 12
     actions:
       - 'give-item;diamond 1'
       - 'send-message;<green>Du hast einen Diamanten erhalten.'
-      - 'close-inventory'
     requirements:
-      - 'date;08.11.2024 00:00'
+      - 'date;02.11.2024 00:00'
   '3':
     slot: 13
     actions:
       - 'give-item;diamond 1'
       - 'send-message;<green>Du hast einen Diamanten erhalten.'
-      - 'close-inventory'
     requirements:
-      - 'date;09.11.2024 00:00'
+      - 'date;03.11.2024 00:00'
   '4':
     slot: 14
     actions:
       - 'give-item;diamond 1'
       - 'send-message;<green>Du hast einen Diamanten erhalten.'
-      - 'close-inventory'
+    requirements:
+      - 'date;4.11.2024 00:00'
+  '5':
+    slot: 15
+    actions:
+      - 'give-item;diamond 1'
+      - 'send-message;<green>Du hast einen Diamanten erhalten.'
+    requirements:
+      - 'date;5.11.2024 00:00'
+  '6':
+    slot: 19
+    actions:
+      - 'give-item;diamond 1'
+      - 'send-message;<green>Du hast einen Diamanten erhalten.'
+    requirements:
+      - 'date;6.11.2024 00:00'
+  '7':
+    slot: 20
+    actions:
+      - 'give-item;diamond 1'
+      - 'send-message;<green>Du hast einen Diamanten erhalten.'
+    requirements:
+      - 'date;7.11.2024 00:00'
+  '8':
+    slot: 21
+    actions:
+      - 'give-item;diamond 1'
+      - 'send-message;<green>Du hast einen Diamanten erhalten.'
+    requirements:
+      - 'date;8.11.2024 00:00'
+  '9':
+    slot: 22
+    actions:
+      - 'give-item;diamond 1'
+      - 'send-message;<green>Du hast einen Diamanten erhalten.'
+    requirements:
+      - 'date;9.11.2024 00:00'
+  '10':
+    slot: 23
+    actions:
+      - 'give-item;diamond 1'
+      - 'send-message;<green>Du hast einen Diamanten erhalten.'
     requirements:
       - 'date;10.11.2024 00:00'
+  '11':
+    slot: 24
+    actions:
+      - 'give-item;diamond 1'
+      - 'send-message;<green>Du hast einen Diamanten erhalten.'
+    requirements:
+      - 'date;11.11.2024 00:00'
+  '12':
+    slot: 25
+    actions:
+      - 'give-item;diamond 1'
+      - 'send-message;<green>Du hast einen Diamanten erhalten.'
+    requirements:
+      - 'date;12.11.2024 00:00'
+  '13':
+    slot: 28
+    actions:
+      - 'give-item;diamond 1'
+      - 'send-message;<green>Du hast einen Diamanten erhalten.'
+    requirements:
+      - 'date;13.11.2024 00:00'
+  '14':
+    slot: 29
+    actions:
+      - 'give-item;diamond 1'
+      - 'send-message;<green>Du hast einen Diamanten erhalten.'
+    requirements:
+      - 'date;14.11.2024 00:00'
+  '15':
+    slot: 30
+    actions:
+      - 'give-item;diamond 1'
+      - 'send-message;<green>Du hast einen Diamanten erhalten.'
+    requirements:
+      - 'date;15.11.2024 00:00'
+  '16':
+    slot: 31
+    actions:
+      - 'give-item;diamond 1'
+      - 'send-message;<green>Du hast einen Diamanten erhalten.'
+    requirements:
+      - 'date;16.11.2024 00:00'
+  '17':
+    slot: 32
+    actions:
+      - 'give-item;diamond 1'
+      - 'send-message;<green>Du hast einen Diamanten erhalten.'
+    requirements:
+      - 'date;17.11.2024 00:00'
+  '18':
+    slot: 33
+    actions:
+      - 'give-item;diamond 1'
+      - 'send-message;<green>Du hast einen Diamanten erhalten.'
+    requirements:
+      - 'date;18.11.2024 00:00'
+  '19':
+    slot: 34
+    actions:
+      - 'give-item;diamond 1'
+      - 'send-message;<green>Du hast einen Diamanten erhalten.'
+    requirements:
+      - 'date;19.11.2024 00:00'
+  '20':
+    slot: 38
+    actions:
+      - 'give-item;diamond 1'
+      - 'send-message;<green>Du hast einen Diamanten erhalten.'
+    requirements:
+      - 'date;20.11.2024 00:00'
+  '21':
+    slot: 39
+    actions:
+      - 'give-item;diamond 1'
+      - 'send-message;<green>Du hast einen Diamanten erhalten.'
+    requirements:
+      - 'date;21.11.2024 00:00'
+  '22':
+    slot: 40
+    actions:
+      - 'give-item;diamond 1'
+      - 'send-message;<green>Du hast einen Diamanten erhalten.'
+    requirements:
+      - 'date;22.11.2024 00:00'
+  '23':
+    slot: 41
+    actions:
+      - 'give-item;diamond 1'
+      - 'send-message;<green>Du hast einen Diamanten erhalten.'
+    requirements:
+      - 'date;23.11.2024 00:00'
+  '24':
+    slot: 42
+    actions:
+      - 'give-item;diamond 1'
+      - 'send-message;<green>Du hast einen Diamanten erhalten.'
+    requirements:
+      - 'date;24.11.2024 00:00'

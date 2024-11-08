@@ -2,7 +2,9 @@ package io.lightplugins.christmas.modules.adventcalendar;
 
 import io.lightplugins.christmas.LightMaster;
 import io.lightplugins.christmas.modules.adventcalendar.api.models.AdventPlayer;
-import io.lightplugins.christmas.modules.adventcalendar.commands.OpenAdventCalendarCommand;
+import io.lightplugins.christmas.modules.adventcalendar.commands.OpenCalendarCommand;
+import io.lightplugins.christmas.modules.adventcalendar.commands.ReloadCommand;
+import io.lightplugins.christmas.modules.adventcalendar.commands.ResetCalendarCommand;
 import io.lightplugins.christmas.modules.adventcalendar.config.MessageParams;
 import io.lightplugins.christmas.modules.adventcalendar.config.SettingParams;
 import io.lightplugins.christmas.modules.adventcalendar.listener.OnPlayerJoin;
@@ -94,6 +96,10 @@ public class LightAdventCalendar implements LightModule {
         this.adventRewards = new FileManager(
                 LightMaster.instance, moduleName + "/rewards/advent-rewards.yml", false);
 
+        if(!adventPlayerData.isEmpty()) {
+            adventPlayerData.clear();
+        }
+
         try {
             // load player data multi file manager
             this.playerDataFiles = new MultiFileManager(
@@ -105,6 +111,8 @@ public class LightAdventCalendar implements LightModule {
         for(File file : playerDataFiles.getYamlFiles()) {
             adventPlayerData.add(new AdventPlayer(file));
         }
+        LightMaster.instance.getDebugPrinting().print(
+                "Successfully loaded §e" + adventPlayerData.size() + "§r player data account(s).");
     }
 
     private void selectLanguage() {
@@ -113,7 +121,9 @@ public class LightAdventCalendar implements LightModule {
 
     private void initSubCommands() {
         PluginCommand ecoCommand = Bukkit.getPluginCommand("advent");
-        subCommands.add(new OpenAdventCalendarCommand());
+        subCommands.add(new OpenCalendarCommand());
+        subCommands.add(new ReloadCommand());
+        subCommands.add(new ResetCalendarCommand());
         new CommandManager(ecoCommand, subCommands);
     }
 

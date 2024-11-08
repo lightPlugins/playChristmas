@@ -2,6 +2,7 @@ package io.lightplugins.christmas.modules.adventcalendar.inventories.constructor
 
 import com.github.stefvanschie.inventoryframework.gui.GuiItem;
 import com.github.stefvanschie.inventoryframework.gui.type.ChestGui;
+import com.github.stefvanschie.inventoryframework.pane.Pane;
 import com.github.stefvanschie.inventoryframework.pane.PatternPane;
 import com.github.stefvanschie.inventoryframework.pane.StaticPane;
 import com.github.stefvanschie.inventoryframework.pane.util.Pattern;
@@ -10,6 +11,7 @@ import io.lightplugins.christmas.LightMaster;
 import io.lightplugins.christmas.modules.adventcalendar.LightAdventCalendar;
 import io.lightplugins.christmas.modules.adventcalendar.api.manager.AdventManager;
 import io.lightplugins.christmas.modules.adventcalendar.api.models.AdventPlayer;
+import io.lightplugins.christmas.util.SoundUtil;
 import io.lightplugins.christmas.util.constructor.InvConstructor;
 import io.lightplugins.christmas.util.handler.ActionHandler;
 import io.lightplugins.christmas.util.handler.ClickItemHandler;
@@ -39,7 +41,9 @@ public class AdventCalendarInv {
     private BukkitTask bukkitTask;
     private final int refreshRate = 20;
     private final List<Player> clickCooldown = new ArrayList<>();
+    private final List<Player> failCooldown = new ArrayList<>();
     private final int cooldownTime = 3;
+    private final int failCooldownTime = 20;
 
     public AdventCalendarInv(
             InvConstructor invConstructor,
@@ -138,24 +142,31 @@ public class AdventCalendarInv {
             Slot slot = Slot.fromIndex(finalClickHandler.getExtraSlot());
 
             // replace placeholders in lore
-            List<String> itemLore = finalClickHandler.getLore();
+            List<String> itemLore = finalClickHandler.getItemMeta().getLore();
             List<String> translatedLore = new ArrayList<>();
 
-            for(String loreLine : itemLore) {
-                translatedLore.add(loreLine.replace("#day#", String.valueOf(day)
-                        .replace("#date#", new SimpleDateFormat("dd.MM.yyyy HH.mm").format(date))));
+            if(itemLore != null) {
+                for (String loreLine : itemLore) {
+                    translatedLore.add(loreLine.replace("#day#", String.valueOf(day))
+                            .replace("#date#", new SimpleDateFormat("dd.MM.yyyy HH.mm").format(date)));
+                }
             }
 
-            ItemMeta im = finalClickHandler.getGuiItem().getItemMeta();
+            ItemMeta im = finalClickHandler.getItemMeta();
 
-            if(im != null) {
+            if (im != null) {
                 im.setLore(translatedLore);
-                finalClickHandler.getGuiItem().setItemMeta(im);
+                im.setDisplayName(im.getDisplayName()
+                        .replace("#day#", String.valueOf(day))
+                        .replace("#date#", new SimpleDateFormat("dd.MM.yyyy").format(date)));
+                finalClickHandler.getItemStack().setItemMeta(im);
+                finalClickHandler.getItemStack().setAmount(day);
             }
 
             ClickItemHandler tempClickHandler = finalClickHandler;
             Date finalDate = date;
-            staticPane.addItem(new GuiItem(finalClickHandler.getGuiItem(), inventoryClickEvent -> {
+            boolean finalHasClaimed = hasClaimed;
+            staticPane.addItem(new GuiItem(finalClickHandler.getItemStack(), inventoryClickEvent -> {
 
                 if(!inventoryClickEvent.isLeftClick()) {
                     return;
@@ -178,16 +189,46 @@ public class AdventCalendarInv {
                 }
 
                 if(!allMet) {
-                    LightMaster.instance.getMessageSender().sendPlayerMessage("requirements-not-met", player);
+                    if(!failCooldown.contains(player)) {
+                        LightMaster.instance.getMessageSender().sendPlayerMessage(
+                                LightAdventCalendar.instance.getMessageParams().requirementFail(), player);
+                        SoundUtil.onFail(player);
+                        failCooldown.add(player);
+                        Bukkit.getScheduler().runTaskLater(LightMaster.instance, () -> {
+                            failCooldown.remove(player);
+                        }, failCooldownTime);
+                        return;
+                    }
                     return;
                 }
+
+                if(finalHasClaimed) {
+                    if(!failCooldown.contains(player)) {
+                        LightMaster.instance.getMessageSender().sendPlayerMessage(
+                                LightAdventCalendar.instance.getMessageParams().alreadyClaimed(), player);
+                        SoundUtil.onFail(player);
+                        failCooldown.add(player);
+                        Bukkit.getScheduler().runTaskLater(LightMaster.instance, () -> {
+                            failCooldown.remove(player);
+                        }, failCooldownTime);
+                        return;
+                    }
+                    return;
+                }
+
 
                 LightAdventCalendar.instance.getAdventPlayerData().stream()
                         .filter(adventPlayer -> adventPlayer.hasPlayerDataFile(player.getUniqueId().toString()))
                         .forEach(adventPlayer -> adventPlayer.addClaimedDate(finalDate));
 
                 tempClickHandler.getExtraActionHandlers().forEach(ActionHandler::handleAction);
+                LightMaster.instance.getMessageSender().sendPlayerMessage(
+                        LightAdventCalendar.instance.getMessageParams().successClaim()
+                                .replace("#day#", String.valueOf(day)), player);
+                SoundUtil.onSuccess(player);
+
                 clickCooldown.add(player);
+                update();
             }), slot);
         }
 
@@ -231,6 +272,16 @@ public class AdventCalendarInv {
 
 
         return patternPane;
+    }
+
+    private void update() {
+
+        gui.getPanes().forEach(Pane::clear);
+
+        gui.addPane(getPatternPane());
+        gui.addPane(getExtraPane());
+
+        gui.update();
     }
 
     // currently toggled - enable this for refreshing the GUI

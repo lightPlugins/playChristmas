@@ -1,12 +1,8 @@
 package io.lightplugins.christmas.modules.adventcalendar.commands;
 
-import com.comphenix.protocol.ProtocolLibrary;
-import com.comphenix.protocol.ProtocolManager;
 import io.lightplugins.christmas.modules.adventcalendar.LightAdventCalendar;
 import io.lightplugins.christmas.modules.adventcalendar.inventories.constructor.AdventCalendarInv;
 import io.lightplugins.christmas.util.SubCommand;
-import io.lightplugins.christmas.util.constructor.InvConstructor;
-import io.lightplugins.christmas.util.manager.InventoryManager;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
@@ -14,7 +10,7 @@ import org.bukkit.entity.Player;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-public class OpenAdventCalendarCommand extends SubCommand {
+public class OpenCalendarCommand extends SubCommand {
 
     @Override
     public List<String> getName() {

@@ -29,7 +29,7 @@ public class PlaceholderManager extends PlaceholderExpansion {
 
     @Override
     public @NotNull String getAuthor() {
-        return "lightStudio";
+        return "lightStudios";
     }
 
     @Override

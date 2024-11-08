@@ -22,8 +22,9 @@ public class AdventPlayer {
     public AdventPlayer(File playerDataFile) {
         this.playerDataFile = playerDataFile;
 
-        loadClaimedDates();
         initNewPlayer();
+        loadClaimedDates();
+
 
     }
 
@@ -34,13 +35,9 @@ public class AdventPlayer {
 
     private void initNewPlayer() {
 
-        if(claimedDates.isEmpty()) {
+        if(hasPlayerDataFile(playerDataFile.getName().replace(".yml", ""))) {
             return;
         }
-
-        claimedDates.forEach(single -> {
-                    LightMaster.instance.getDebugPrinting().print("Player has claimed dates, skipping initialization: " + single);
-                });
 
         LightMaster.instance.getDebugPrinting().print("Player has no claimed dates, initializing new player data file");
         // Generate data into the player storage file
@@ -58,9 +55,9 @@ public class AdventPlayer {
         FileConfiguration config = YamlConfiguration.loadConfiguration(playerDataFile);
 
         if(config.contains("claimed-dates")) {
-            claimedDates.forEach(date -> {
+            config.getStringList("claimed-dates").forEach(date -> {
                 try {
-                    claimedDates.add(dateFormat.parse(config.getString("claimed-dates." + date)));
+                    claimedDates.add(dateFormat.parse(date));
                 } catch (Exception e) {
                     throw new RuntimeException("Error parsing date: " + date, e);
                 }
@@ -74,6 +71,7 @@ public class AdventPlayer {
 
     public void addClaimedDate(Date date) {
         if (hasClaimed(date)) {
+            LightMaster.instance.getDebugPrinting().print("Player has already claimed date: " + date);
             return;
         }
         claimedDates.add(date);
@@ -88,6 +86,21 @@ public class AdventPlayer {
             config.save(playerDataFile);
         } catch (Exception e) {
             throw new RuntimeException("Error saving claimed date: " + date, e);
+        }
+    }
+
+    public String getPlayerUUID() {
+        return playerDataFile.getName().replace(".yml", "");
+    }
+
+    public void resetPlayer() {
+        claimedDates.clear();
+        FileConfiguration config = YamlConfiguration.loadConfiguration(playerDataFile);
+        config.set("claimed-dates", new ArrayList<>());
+        try {
+            config.save(playerDataFile);
+        } catch (Exception e) {
+            throw new RuntimeException("Error saving player data file for player", e);
         }
     }
 

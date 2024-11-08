@@ -1,0 +1,22 @@
+package io.lightplugins.christmas.util;
+
+import org.bukkit.Sound;
+import org.bukkit.entity.Player;
+
+public class SoundUtil {
+
+    public static void onSuccess(Player player) {
+        Sound sound = Sound.ENTITY_PLAYER_LEVELUP;
+        float volume = 0.75f;
+        float pitch = 1.6f;
+        player.playSound(player.getLocation(), sound, volume, pitch);
+    }
+
+    public static void onFail(Player player) {
+        Sound sound = Sound.BLOCK_NOTE_BLOCK_DIDGERIDOO;
+        float volume = 0.75f;
+        float pitch = 0.1f;
+        player.playSound(player.getLocation(), sound, volume, pitch);
+    }
+
+}

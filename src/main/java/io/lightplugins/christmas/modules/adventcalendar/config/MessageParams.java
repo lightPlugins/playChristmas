@@ -18,6 +18,11 @@ public class MessageParams {
     public String moduleReload() { return config.getString("moduleReload"); }
     public String reloadAll() { return config.getString("reloadAll"); }
     public String wrongSyntax() { return config.getString("wrongSyntax"); }
-    public String testSyntax() {return config.getString("testSyntax"); }
+    public String resetPlayer() {return config.getString("resetPlayer"); }
+    public String resetAll() {return config.getString("resetAll"); }
+    public String playerNotFound() {return config.getString("playerNotFound"); }
+    public String requirementFail() {return config.getString("requirementFail"); }
+    public String alreadyClaimed() {return config.getString("alreadyClaimed"); }
+    public String successClaim() {return config.getString("successClaim"); }
 
 }
