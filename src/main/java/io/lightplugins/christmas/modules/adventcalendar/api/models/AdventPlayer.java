@@ -1,5 +1,6 @@
 package io.lightplugins.christmas.modules.adventcalendar.api.models;
 
+import io.lightplugins.christmas.LightMaster;
 import lombok.Getter;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -33,9 +34,15 @@ public class AdventPlayer {
 
     private void initNewPlayer() {
 
-        if(!claimedDates.isEmpty()) {
+        if(claimedDates.isEmpty()) {
             return;
         }
+
+        claimedDates.forEach(single -> {
+                    LightMaster.instance.getDebugPrinting().print("Player has claimed dates, skipping initialization: " + single);
+                });
+
+        LightMaster.instance.getDebugPrinting().print("Player has no claimed dates, initializing new player data file");
         // Generate data into the player storage file
         FileConfiguration config = YamlConfiguration.loadConfiguration(playerDataFile);
         try {

@@ -1,5 +1,6 @@
 package io.lightplugins.christmas.modules.adventcalendar.listener;
 
+import io.lightplugins.christmas.LightMaster;
 import io.lightplugins.christmas.modules.adventcalendar.LightAdventCalendar;
 import io.lightplugins.christmas.modules.adventcalendar.api.models.AdventPlayer;
 import org.bukkit.entity.Player;
@@ -25,9 +26,12 @@ public class OnPlayerJoin implements Listener {
 
             for(AdventPlayer adventPlayer : LightAdventCalendar.instance.getAdventPlayerData()) {
                 if(adventPlayer.hasPlayerDataFile(player.getUniqueId().toString())) {
+                    LightMaster.instance.getDebugPrinting().print("Player data file already exists for player: " + player.getName());
                     return;
                 }
             }
+
+            LightMaster.instance.getDebugPrinting().print("Creating player data file for player: " + player.getName());
             new AdventPlayer(file);
         } catch (IOException e) {
             throw new RuntimeException("Error creating player data file for player: " + player.getName(), e);
