@@ -35,6 +35,7 @@ public class RequirementHandler {
 
     }
 
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public boolean checkRequirements() {
         if (requirementDataArray == null) {
             LightMaster.instance.getDebugPrinting().print("RequirementHandler -> RequirementDataArray is null !!!");

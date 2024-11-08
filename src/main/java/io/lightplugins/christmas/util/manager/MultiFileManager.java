@@ -49,4 +49,32 @@ public class MultiFileManager {
         }
         return fileName;
     }
+
+    public boolean createFile(String fileName) throws IOException {
+        File file = new File(directoryPath + File.separator + fileName + ".yml");
+        if (!file.exists()) {
+            if (file.createNewFile()) {
+                yamlFiles.add(file);
+                return true;
+            } else {
+                throw new IOException("Failed to create file: " + fileName);
+            }
+        }
+        return false;
+    }
+
+    public boolean deleteFile(String fileName) throws IOException {
+        File file = new File(directoryPath + File.separator + fileName + ".yml");
+
+        if (file.exists()) {
+            if (file.delete()) {
+                yamlFiles.remove(file);
+                return true;
+            } else {
+                throw new IOException("Failed to delete file: " + fileName);
+            }
+        } else {
+            throw new IOException("File not found: " + fileName);
+        }
+    }
 }

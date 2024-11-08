@@ -1,9 +1,6 @@
 package io.lightplugins.christmas.util.handler;
 
-import io.lightplugins.christmas.LightMaster;
-import io.lightplugins.christmas.util.handler.actions.GiveItemAction;
-import io.lightplugins.christmas.util.handler.actions.InvCloseAction;
-import io.lightplugins.christmas.util.handler.actions.MessageAction;
+import io.lightplugins.christmas.util.handler.actions.*;
 import io.lightplugins.christmas.util.interfaces.LightAction;
 import org.bukkit.entity.Player;
 
@@ -34,9 +31,11 @@ public class ActionHandler {
     }
 
     private static void initializeActions() {
-        actions.put("message", new MessageAction());
+        actions.put("send-message", new MessageAction());
         actions.put("close-inventory", new InvCloseAction());
         actions.put("give-item", new GiveItemAction());
+        actions.put("player-cmd", new PlayerCmdAction());
+        actions.put("console-cmd", new ConsoleCmdAction());
     }
 
     public String[] getActions() {

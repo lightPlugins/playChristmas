@@ -52,8 +52,8 @@ public class LightMaster extends JavaPlugin {
 
     public HikariDataSource ds;
 
-    public final String consolePrefix = "§r[light§eDummy§r] §r";
-    public final String pluginName = "lightDummy";
+    public final String consolePrefix = "§r[play§eChristmas§r] §r";
+    public final String pluginName = "playChristmas";
 
     private FileManager settings;
     @Getter

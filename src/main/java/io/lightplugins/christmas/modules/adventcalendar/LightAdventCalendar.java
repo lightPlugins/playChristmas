@@ -8,14 +8,12 @@ import io.lightplugins.christmas.modules.adventcalendar.listener.OnPlayerJoin;
 import io.lightplugins.christmas.util.SubCommand;
 import io.lightplugins.christmas.util.SubPlaceholder;
 import io.lightplugins.christmas.util.interfaces.LightModule;
-import io.lightplugins.christmas.util.manager.CommandManager;
-import io.lightplugins.christmas.util.manager.FileManager;
-import io.lightplugins.christmas.util.manager.InventoryManager;
-import io.lightplugins.christmas.util.manager.PlaceholderManager;
+import io.lightplugins.christmas.util.manager.*;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.command.PluginCommand;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 @Getter
@@ -36,6 +34,8 @@ public class LightAdventCalendar implements LightModule {
     private FileManager language;
     private FileManager adventCalendar;
     private FileManager adventRewards;
+
+    private MultiFileManager playerDataFiles;
 
 
     @Override
@@ -90,6 +90,14 @@ public class LightAdventCalendar implements LightModule {
                 LightMaster.instance, moduleName + "/inventories/advent-calendar.yml", false);
         this.adventRewards = new FileManager(
                 LightMaster.instance, moduleName + "/rewards/advent-rewards.yml", false);
+
+        try {
+            // load player data multi file manager
+            this.playerDataFiles = new MultiFileManager(
+                    "plugins/lightInventory/" + moduleName + "/storage/player-data/");
+        }catch (IOException e) {
+            throw new RuntimeException("Error reading player data files for module: " + moduleName, e);
+        }
     }
 
     private void selectLanguage() {

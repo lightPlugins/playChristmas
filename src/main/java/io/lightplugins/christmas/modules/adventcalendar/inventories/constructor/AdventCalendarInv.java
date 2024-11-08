@@ -7,7 +7,6 @@ import com.github.stefvanschie.inventoryframework.pane.StaticPane;
 import com.github.stefvanschie.inventoryframework.pane.util.Pattern;
 import com.github.stefvanschie.inventoryframework.pane.util.Slot;
 import io.lightplugins.christmas.LightMaster;
-import io.lightplugins.christmas.modules.adventcalendar.LightAdventCalendar;
 import io.lightplugins.christmas.modules.adventcalendar.api.manager.AdventManager;
 import io.lightplugins.christmas.util.constructor.InvConstructor;
 import io.lightplugins.christmas.util.handler.ActionHandler;
@@ -20,9 +19,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -81,11 +78,6 @@ public class AdventCalendarInv {
 
         for(String rewardKey : rewardSection.getKeys(false)) {
 
-            LightMaster.instance.getDebugPrinting().print("Reward Key: " + rewardKey);
-            for(String key : extraItemSection.getKeys(false)) {
-                LightMaster.instance.getDebugPrinting().print("Extra Item Key: " + key);
-            }
-
             ClickItemHandler readyClickHandler = new ClickItemHandler(
                     Objects.requireNonNull(extraItemSection.getConfigurationSection("ready")), player);
 
@@ -102,16 +94,12 @@ public class AdventCalendarInv {
             ClickItemHandler finalClickHandler;
 
             boolean allRequirementsMet = true;
-            LightMaster.instance.getDebugPrinting().print("Checking requirements for reward: " + rewardKey);
             for (RequirementHandler requirementHandler : requirementHandlers) {
                 if (!requirementHandler.checkRequirements()) {
-                    LightMaster.instance.getDebugPrinting().print(requirementHandler.getRequirementDataArray()[1] + " 1 not met");
                     allRequirementsMet = false;
                     break;
                 }
-                LightMaster.instance.getDebugPrinting().print(requirementHandler.getRequirementDataArray()[1] + " 1 success met");
             }
-            LightMaster.instance.getDebugPrinting().print("All requirements checked with result: " + allRequirementsMet);
 
             if (allRequirementsMet) {
                 finalClickHandler = readyClickHandler;
@@ -123,8 +111,6 @@ public class AdventCalendarInv {
 
             int day = Integer.parseInt(rewardKey);
             Slot slot = Slot.fromIndex(finalClickHandler.getExtraSlot());
-
-            LightMaster.instance.getDebugPrinting().print("Slot: " + finalClickHandler.getExtraSlot());
 
             ClickItemHandler tempClickHandler = finalClickHandler;
             staticPane.addItem(new GuiItem(finalClickHandler.getGuiItem(), inventoryClickEvent -> {
@@ -154,11 +140,7 @@ public class AdventCalendarInv {
                     return;
                 }
 
-                LightMaster.instance.getDebugPrinting().print("All requirements met for day: " + day);
-                tempClickHandler.getExtraActionHandlers().forEach(singleAction -> {
-                    LightMaster.instance.getDebugPrinting().print("Action executed for day: " + singleAction.getActions()[0] );
-                    singleAction.handleAction();
-                });
+                tempClickHandler.getExtraActionHandlers().forEach(ActionHandler::handleAction);
                 clickCooldown.add(player);
             }), slot);
         }
@@ -205,6 +187,7 @@ public class AdventCalendarInv {
         return patternPane;
     }
 
+    // currently toggled - enable this for refreshing the GUI
     private void refreshGui() {
         // gui.setTitle(invConstructor.getGuiTitle());
 

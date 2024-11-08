@@ -233,8 +233,6 @@ public class ClickItemHandler {
             try {
                 ItemFlag itemFlag = ItemFlag.valueOf(split.toUpperCase());
                 itemMeta.addItemFlags(itemFlag);
-                // Debug printing for testing purposes -> remove in production !
-                LightMaster.instance.getDebugPrinting().print("Added item flag: " + itemFlag.name() + " to item: " + itemMeta.getDisplayName());
             } catch (IllegalArgumentException ignored) { }
         }
 
@@ -289,7 +287,6 @@ public class ClickItemHandler {
                 action = action.replace("#" + key + "#", placeholders.get(key));
             }
             extraActionHandlers.add(new ActionHandler(player, action));
-            LightMaster.instance.getDebugPrinting().print("Extra action added: " + action);
         });
     }
 
