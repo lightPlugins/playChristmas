@@ -1,6 +1,7 @@
 package io.lightplugins.christmas.util.manager;
 
 import io.lightplugins.christmas.modules.adventcalendar.inventories.constructor.AdventCalendarInv;
+import io.lightplugins.christmas.modules.secretsanta.inventories.constructor.SecretSantaInv;
 import io.lightplugins.christmas.util.constructor.InvConstructor;
 import lombok.Getter;
 import org.bukkit.configuration.ConfigurationSection;
@@ -48,13 +49,12 @@ public class InventoryManager {
 
     }
 
-    public AdventCalendarInv generateInventoryFromFile(File file, File extraFile, Player player) {
+    public SecretSantaInv generateFromSingleFile(FileManager file, Player player) {
 
-        FileConfiguration conf = YamlConfiguration.loadConfiguration(file);
-        FileConfiguration extraConf = YamlConfiguration.loadConfiguration(extraFile);
+        FileConfiguration conf = file.getConfig();
         InvConstructor invConstructor = new InvConstructor();
 
-        String guiName = file.getName().replace(".yml", "");
+        String guiName = file.getConfig().getName().replace(".yml", "");
         String title = conf.getString("gui-title");
         int row = conf.getInt("rows");
         List<String> pattern = conf.getStringList("pattern");
@@ -66,10 +66,9 @@ public class InventoryManager {
         invConstructor.setPattern(pattern);
         invConstructor.setClickItemHandlersSection(clickContent);
 
-        return new AdventCalendarInv(
+        return new SecretSantaInv(
                 invConstructor,
-                extraConf.getConfigurationSection("gui-items"),
-                extraConf.getConfigurationSection("rewards"),
+                clickContent,
                 player);
 
     }

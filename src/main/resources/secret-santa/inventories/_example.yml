@@ -1,0 +1,33 @@
+gui-title: 'Example Custom GUI'
+rows: 6
+pattern:
+  - '000000000'
+  - '0000a0000'
+  - '000000000'
+  - '000000000'
+  - '000000000'
+  - '000000000'
+contents:
+  'a':
+    id: gui_item
+    args:
+      placeholders:
+        value: '%lighteconomy_eco_top_1_value%'
+        name: '%lighteconomy_eco_top_1_name%'
+      item: 'player_head 1 hide_attributes glow hide_enchants'
+      head-data: '#name#'
+      display-name: '<red>#1 <gray>#name#'
+      lore:
+        - '<gray>This is a lore #value#'
+      click-actions:
+        - 'close'
+        - 'message;%player% <green>This is a Test Message'
+  '0':
+    id: gui_item
+    args:
+      placeholders: [ ]
+      item: 'black_stained_glass_pane 1 hide_attributes'
+      head-data: '#name#'
+      display-name: ' '
+      lore: [ ]
+      click-actions: [ ]

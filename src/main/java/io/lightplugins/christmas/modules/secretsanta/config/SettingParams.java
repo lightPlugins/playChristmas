@@ -1,16 +1,16 @@
 package io.lightplugins.christmas.modules.secretsanta.config;
 
-import io.lightplugins.christmas.modules.adventcalendar.LightAdventCalendar;
+import io.lightplugins.christmas.modules.secretsanta.LightSecretSanta;
 
 public class SettingParams {
 
-    private final LightAdventCalendar lightBank;
+    private final LightSecretSanta lightSecretSanta;
 
-    public SettingParams(LightAdventCalendar lightBank) {
-        this.lightBank = lightBank;
+    public SettingParams(LightSecretSanta lightSecretSanta) {
+        this.lightSecretSanta = lightSecretSanta;
     }
 
     public String getModuleLanguage() {
-        return lightBank.getSettings().getConfig().getString("module-language");
+        return lightSecretSanta.getSettings().getConfig().getString("module-language");
     }
 }

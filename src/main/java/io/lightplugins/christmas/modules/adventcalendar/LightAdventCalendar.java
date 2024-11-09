@@ -69,9 +69,7 @@ public class LightAdventCalendar implements LightModule {
     }
 
     @Override
-    public void disable() {
-
-    }
+    public void disable() { }
 
     @Override
     public void reload() {
