@@ -249,6 +249,104 @@ public class ClickItemHandler {
     }
 
     /**
+     * Replaces a specific line in the lore with a new line.
+     * For example:
+     * -> lineToReplace = '- #reward#'
+     * -> newLine = "replacement"
+     * - rewards:
+     *      - '...'
+     *      - '- #reward#'
+     *      - '...'
+     * - rewards:
+     *      - '...'
+     *      - '- replacement'
+     *      - '...'
+     *
+     * @param lineToReplace the line to replace
+     * @param newLine the new line to set for the replacement
+     */
+    public void replaceLoreLine(String lineToReplace, String newLine) {
+
+        List<String> newLore = new ArrayList<>();
+
+        if(itemMeta.getLore() == null) {
+            return;
+        }
+
+        for(String line : lore) {
+            if(line.contains(lineToReplace)) {
+                line = line.replace(lineToReplace, newLine);
+            }
+            newLore.add(line);
+        }
+
+        itemMeta.setLore(newLore);
+        itemStack.setItemMeta(itemMeta);
+    }
+
+    /**
+     * Replaces a specific line in the lore with a new line.
+     * For example:
+     * -> lineToReplace = '- #reward#'
+     * -> newLines = ("replacement1", "replacement2", "replacement3")
+     * - rewards:
+     *      - '...'
+     *      - '- #reward#'
+     *      - '...'
+     * - rewards:
+     *      - '...'
+     *      - '- replacement1'
+     *      - '- replacement2'
+     *      - '- replacement3'
+     *      - '...'
+     *
+     * @param lineToReplace the line to replace
+     * @param newLines the new lines to set for the replacement (multiple lines)
+     */
+    public void replaceMultipleLoreLines(String lineToReplace, List<String> newLines) {
+
+        List<String> newLore = new ArrayList<>();
+
+        if (itemMeta.getLore() == null) {
+            return;
+        }
+
+        for (String line : lore) {
+            if (line.contains(lineToReplace)) {
+                for (String newLine : newLines) {
+                    newLore.add(LightMaster.instance.colorTranslation.loreLineTranslation(
+                            line.replace(lineToReplace, newLine), player));
+                }
+                continue;
+            }
+            newLore.add(LightMaster.instance.colorTranslation.loreLineTranslation(line, player));
+        }
+
+        itemMeta.setLore(newLore);
+        itemStack.setItemMeta(itemMeta);
+    }
+
+    /**
+     * Replaces a specified placeholder in the display name with a new string.
+     * @param replacement the placeholder to replace
+     * @param newDisplayName the new replacement for the placeholder
+     */
+    public void replaceDisplayName(String replacement, String newDisplayName) {
+        if(itemMeta.getDisplayName().contains(replacement)) {
+            itemMeta.setDisplayName(itemMeta.getDisplayName().replace(replacement, newDisplayName));
+        }
+        itemStack.setItemMeta(itemMeta);
+    }
+
+    /**
+     * Set the item amount for the itemStack.
+     * @param amount the amount to set
+     */
+    public void setItemAmount(int amount) {
+        itemStack.setAmount(amount);
+    }
+
+    /**
      * Reads and processes actions from the actionsSection list.
      * Iterates through each action, replaces placeholders with their corresponding values,
      * and adds the processed action to the actionHandlers list.

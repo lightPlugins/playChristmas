@@ -166,27 +166,15 @@ public class AdventCalendarInv {
             int day = Integer.parseInt(rewardKey);
             Slot slot = Slot.fromIndex(finalClickHandler.getExtraSlot());
 
-            // replace placeholders in lore
-            List<String> itemLore = finalClickHandler.getItemMeta().getLore();
-            List<String> translatedLore = new ArrayList<>();
-
-            if(itemLore != null) {
-                for (String loreLine : itemLore) {
-                    translatedLore.add(loreLine.replace("#day#", String.valueOf(day))
-                            .replace("#date#", new SimpleDateFormat("dd.MM.yyyy HH.mm").format(date)));
-                }
-            }
-
-            ItemMeta im = finalClickHandler.getItemMeta();
-
-            if (im != null) {
-                im.setLore(translatedLore);
-                im.setDisplayName(im.getDisplayName()
-                        .replace("#day#", String.valueOf(day))
-                        .replace("#date#", new SimpleDateFormat("dd.MM.yyyy").format(date)));
-                finalClickHandler.getItemStack().setItemMeta(im);
-                finalClickHandler.getItemStack().setAmount(day);
-            }
+            finalClickHandler.replaceLoreLine("#day#",
+                    String.valueOf(day));
+            finalClickHandler.replaceLoreLine("#date#",
+                    new SimpleDateFormat("dd.MM.yyyy").format(date));
+            finalClickHandler.replaceDisplayName("#day#",
+                    String.valueOf(day));
+            finalClickHandler.replaceDisplayName("#date#",
+                    new SimpleDateFormat("dd.MM.yyyy").format(date));
+            finalClickHandler.setItemAmount(day);
 
             ClickItemHandler tempClickHandler = finalClickHandler;
             Date finalDate = date;
