@@ -217,7 +217,7 @@ public class ClickItemHandler {
         for(String split : splitItem) {
 
             // Check if the split contains model-data
-            if(split.equalsIgnoreCase("model-data")) {
+            if(split.contains("model-data")) {
                 String[] splitModelData = split.split(":");
                 if(NumberFormatter.isNumber(splitModelData[1])) {
                     itemMeta.setCustomModelData(Integer.parseInt(splitModelData[1]));
@@ -300,10 +300,10 @@ public class ClickItemHandler {
      *      - '- replacement3'
      *      - '...'
      *
-     * @param lineToReplace the line to replace
+     * @param placeholderToReplace the line to replace
      * @param newLines the new lines to set for the replacement (multiple lines)
      */
-    public void replaceMultipleLoreLines(String lineToReplace, List<String> newLines) {
+    public void replaceMultipleLoreLines(String placeholderToReplace, List<String> newLines) {
 
         List<String> newLore = new ArrayList<>();
 
@@ -312,14 +312,13 @@ public class ClickItemHandler {
         }
 
         for (String line : lore) {
-            if (line.contains(lineToReplace)) {
+            if (line.contains(placeholderToReplace)) {
                 for (String newLine : newLines) {
-                    newLore.add(LightMaster.instance.colorTranslation.loreLineTranslation(
-                            line.replace(lineToReplace, newLine), player));
+                    newLore.add(line.replace(placeholderToReplace, newLine));
                 }
                 continue;
             }
-            newLore.add(LightMaster.instance.colorTranslation.loreLineTranslation(line, player));
+            newLore.add(line);
         }
 
         itemMeta.setLore(newLore);

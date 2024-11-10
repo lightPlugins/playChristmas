@@ -31,7 +31,7 @@ public class OpenMainInv extends SubCommand {
 
     @Override
     public int maxArgs() {
-        return 2;
+        return 1;
     }
 
     @Override

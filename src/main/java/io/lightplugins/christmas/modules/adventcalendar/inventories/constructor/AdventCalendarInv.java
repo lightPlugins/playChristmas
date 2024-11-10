@@ -176,6 +176,18 @@ public class AdventCalendarInv {
                     new SimpleDateFormat("dd.MM.yyyy").format(date));
             finalClickHandler.setItemAmount(day);
 
+            List<String> replacementLore = new ArrayList<>();
+
+            finalClickHandler.getExtraActionHandlers().forEach(singleActionHandler -> {
+                singleActionHandler.getRewardNames().forEach(rewardName -> {
+                    String rewardReplacement = LightMaster.instance.colorTranslation.loreLineTranslation(
+                            rewardName, player);
+                    replacementLore.add(rewardReplacement);
+                });
+            });
+
+            finalClickHandler.replaceMultipleLoreLines("#rewards#", replacementLore);
+
             ClickItemHandler tempClickHandler = finalClickHandler;
             Date finalDate = date;
             boolean finalHasClaimed = hasClaimed;
