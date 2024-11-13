@@ -108,9 +108,7 @@ public class AdventCalendarInv {
 
         StaticPane staticPane = new StaticPane(0, 0, 9, 6);
 
-        List<String> shuffledRewards = rewardSection.getKeys(false).stream().sorted().toList();
-
-        for(String rewardKey : shuffledRewards) {
+        for(String rewardKey : rewardSection.getKeys(false)) {
 
             ClickItemHandler readyClickHandler = new ClickItemHandler(
                     Objects.requireNonNull(extraItemSection.getConfigurationSection("ready")), player);
