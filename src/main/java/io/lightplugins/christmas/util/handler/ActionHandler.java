@@ -40,6 +40,7 @@ public class ActionHandler {
         actions.put("give-item", new GiveItemAction());
         actions.put("player-cmd", new PlayerCmdAction());
         actions.put("console-cmd", new ConsoleCmdAction());
+        actions.put("open-inventory", new InvOpenAction());
     }
 
     public String[] getActions() {

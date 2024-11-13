@@ -2,7 +2,7 @@ package io.lightplugins.christmas.modules.secretsanta.commands;
 
 import io.lightplugins.christmas.LightMaster;
 import io.lightplugins.christmas.modules.secretsanta.LightSecretSanta;
-import io.lightplugins.christmas.modules.secretsanta.inventories.constructor.SecretSantaInv;
+import io.lightplugins.christmas.modules.secretsanta.inventories.constructor.SecretSantaMainInv;
 import io.lightplugins.christmas.util.SubCommand;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -58,7 +58,7 @@ public class OpenMainInv extends SubCommand {
     @Override
     public boolean performAsPlayer(Player player, String[] args) throws ExecutionException, InterruptedException {
 
-        SecretSantaInv secretSantaInv = LightSecretSanta.instance.getInventoryManager().generateFromSingleFile(
+        SecretSantaMainInv secretSantaInv = LightSecretSanta.instance.getInventoryManager().generateSecretSantaMainInv(
                 LightSecretSanta.instance.getSecretSantaMainInv(),
                 player
         );
@@ -80,7 +80,7 @@ public class OpenMainInv extends SubCommand {
         }
 
         if(target.isOnline()) {
-            SecretSantaInv secretSantaInv = LightSecretSanta.instance.getInventoryManager().generateFromSingleFile(
+            SecretSantaMainInv secretSantaInv = LightSecretSanta.instance.getInventoryManager().generateSecretSantaMainInv(
                     LightSecretSanta.instance.getSecretSantaMainInv(),
                     target.getPlayer()
             );

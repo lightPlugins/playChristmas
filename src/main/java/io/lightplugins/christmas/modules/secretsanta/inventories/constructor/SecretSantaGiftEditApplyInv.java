@@ -6,28 +6,18 @@ import com.github.stefvanschie.inventoryframework.pane.Pane;
 import com.github.stefvanschie.inventoryframework.pane.PatternPane;
 import com.github.stefvanschie.inventoryframework.pane.StaticPane;
 import com.github.stefvanschie.inventoryframework.pane.util.Pattern;
-import com.github.stefvanschie.inventoryframework.pane.util.Slot;
 import io.lightplugins.christmas.LightMaster;
-import io.lightplugins.christmas.modules.adventcalendar.LightAdventCalendar;
-import io.lightplugins.christmas.modules.adventcalendar.api.manager.AdventManager;
-import io.lightplugins.christmas.modules.adventcalendar.api.models.AdventPlayer;
-import io.lightplugins.christmas.util.SoundUtil;
 import io.lightplugins.christmas.util.constructor.InvConstructor;
 import io.lightplugins.christmas.util.handler.ActionHandler;
 import io.lightplugins.christmas.util.handler.ClickItemHandler;
-import io.lightplugins.christmas.util.handler.RequirementHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -43,7 +33,7 @@ import java.util.Objects;
  *  </p>
  */
 
-public class SecretSantaInv {
+public class SecretSantaGiftEditApplyInv {
 
     private final ChestGui gui = new ChestGui(6, "Init");
     private final InvConstructor invConstructor;
@@ -63,7 +53,7 @@ public class SecretSantaInv {
      * @param player Player - The player to open the inventory for
      */
 
-    public SecretSantaInv(
+    public SecretSantaGiftEditApplyInv(
             InvConstructor invConstructor,
             ConfigurationSection extraSection,
             Player player) {

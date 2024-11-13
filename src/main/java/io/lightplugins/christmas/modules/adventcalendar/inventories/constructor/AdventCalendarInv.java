@@ -26,10 +26,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * AdventCalendarInv
@@ -110,7 +108,9 @@ public class AdventCalendarInv {
 
         StaticPane staticPane = new StaticPane(0, 0, 9, 6);
 
-        for(String rewardKey : rewardSection.getKeys(false)) {
+        List<String> shuffledRewards = rewardSection.getKeys(false).stream().sorted().toList();
+
+        for(String rewardKey : shuffledRewards) {
 
             ClickItemHandler readyClickHandler = new ClickItemHandler(
                     Objects.requireNonNull(extraItemSection.getConfigurationSection("ready")), player);
