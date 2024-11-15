@@ -1,8 +1,6 @@
 package io.lightplugins.christmas.modules.secretsanta.listener;
 
 import io.lightplugins.christmas.LightMaster;
-import io.lightplugins.christmas.modules.adventcalendar.LightAdventCalendar;
-import io.lightplugins.christmas.modules.adventcalendar.api.models.AdventPlayer;
 import io.lightplugins.christmas.modules.secretsanta.LightSecretSanta;
 import io.lightplugins.christmas.modules.secretsanta.api.models.SecretPlayer;
 import org.bukkit.entity.Player;
@@ -33,7 +31,7 @@ public class OnJoinEvent implements Listener {
             File file = LightSecretSanta.instance.getPlayerDataFiles().createFile(player.getUniqueId().toString());
 
             LightMaster.instance.getDebugPrinting().print("Creating secret player data file for player: " + player.getName());
-            LightSecretSanta.instance.getSecretPlayerData().add(new SecretPlayer(file));
+            LightSecretSanta.instance.getSecretPlayerData().add(new SecretPlayer(file).initNewPlayer());
         } catch (IOException e) {
             throw new RuntimeException("Error creating player data file for player: " + player.getName(), e);
         }

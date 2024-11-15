@@ -15,18 +15,19 @@ import io.lightplugins.christmas.util.constructor.InvConstructor;
 import io.lightplugins.christmas.util.handler.ActionHandler;
 import io.lightplugins.christmas.util.handler.ClickItemHandler;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * AdventCalendarInv
@@ -52,6 +53,8 @@ public class SecretSantaGiftEditInv {
     private final List<Player> failCooldown = new ArrayList<>();
     private final int cooldownTime = 3;
     private final int failCooldownTime = 20;
+    private ItemStack clickedItemStack;
+    private final SecretPlayer secretPlayer;
 
     /**
      * Constructor for the AdventCalendarInv
@@ -68,6 +71,12 @@ public class SecretSantaGiftEditInv {
         this.invConstructor = invConstructor;
         this.extraSection = extraSection;
         this.player = player;
+
+        this.secretPlayer = LightSecretSanta.instance.getSecretPlayerData().stream()
+                .filter(playerData -> playerData.getPlayerDataFile().getName().replace(".yml", "")
+                        .equalsIgnoreCase(player.getUniqueId().toString()))
+                .findFirst()
+                .orElseThrow(() -> new IllegalStateException("SecretPlayer not found for player: " + player.getUniqueId()));
     }
 
     /**
@@ -76,9 +85,10 @@ public class SecretSantaGiftEditInv {
      */
     public void openInventory() {
 
+
+
         gui.setRows(invConstructor.getRows());
         gui.setTitle(LightMaster.instance.getColorTranslation().loreLineTranslation(invConstructor.getGuiTitle(), player));
-        //gui.update();
         gui.setOnGlobalClick(event -> event.setCancelled(true));
 
         // bukkitTask = Bukkit.getScheduler().runTaskTimer(LightMaster.instance, this::refreshGui, 0, refreshRate);
@@ -91,47 +101,26 @@ public class SecretSantaGiftEditInv {
 
         gui.addPane(getExtraPane());
         gui.addPane(getPatternPane());
-        gui.addPane(getInventoryPane());
-        gui.show(player);
-    }
 
-    private OutlinePane getInventoryPane() {
-        OutlinePane selection = new OutlinePane(0, 5, 9, 4);
+        // handle the click actions from the players inventory
 
+        gui.setOnBottomClick(event -> {
+            event.setCancelled(true);
+            if(event.getCurrentItem() != null &! secretPlayer.hasGift()) {
+                clickedItemStack = event.getCurrentItem().clone();
+                LightMaster.instance.getDebugPrinting().print("Gift stack in BottomClick before timer: " + this.clickedItemStack);
+                // create a runnable
+                Bukkit.getScheduler().runTaskTimer(LightMaster.instance, () -> {
+                    // open the SecretSantaGiftEditApplyInv
+                    LightMaster.instance.getDebugPrinting().print("Gift stack in BottomClick after Timer: " + this.clickedItemStack);
 
-        player.getInventory().forEach(itemStack -> {
-            if(itemStack == null) {
-                return;
+                }, 0, 10);
+
             }
-            selection.addItem(new GuiItem(itemStack, inventoryClickEvent -> {
-                if(!inventoryClickEvent.isLeftClick()) {
-                    return;
-                }
-
-                SecretPlayer secretPlayer = LightSecretSanta.instance.getSecretPlayerData().stream()
-                        .filter(playerData -> playerData.getPlayerDataFile().getName().replace(".yml", "")
-                                .equalsIgnoreCase(player.getUniqueId().toString())).findFirst().orElse(null);
-
-                if(secretPlayer == null) {
-                    LightMaster.instance.getDebugPrinting().print("SecretPlayer is null !");
-                    return;
-                }
-
-                if(secretPlayer.hasGift()) {
-                    LightMaster.instance.getDebugPrinting().print("Player already has a gift !");
-                    return;
-                }
-
-                LightMaster.instance.getDebugPrinting().print(
-                        "Setting gift: " + itemStack.getType() + " for Player: " + player.getName());
-
-                // secretPlayer.setGift(itemStack);
-                // update();
-            }));
+            update();
         });
 
-
-        return selection;
+        gui.show(player);
     }
 
     /**
@@ -148,9 +137,8 @@ public class SecretSantaGiftEditInv {
         ClickItemHandler giftStack = new ClickItemHandler(
                 Objects.requireNonNull(extraSection.getConfigurationSection("gift")), player);
 
-        SecretPlayer secretPlayer = LightSecretSanta.instance.getSecretPlayerData().stream()
-                .filter(playerData -> playerData.getPlayerDataFile().getName().replace(".yml", "")
-                        .equalsIgnoreCase(player.getUniqueId().toString())).findFirst().orElse(null);
+        ClickItemHandler accept = new ClickItemHandler(
+                Objects.requireNonNull(extraSection.getConfigurationSection("accept")), player);
 
         if(secretPlayer == null) {
             LightMaster.instance.getDebugPrinting().print("SecretPlayer is null !");
@@ -159,9 +147,12 @@ public class SecretSantaGiftEditInv {
         int slotID = 22;
         Slot slot = Slot.fromIndex(slotID);
 
-        ItemStack itemStack = secretPlayer.hasGift() ? giftStack.getGuiItem() : noGiftStack.getGuiItem();
+        ItemStack guiItemStack;
 
-        staticPane.addItem(new GuiItem(itemStack, inventoryClickEvent -> {
+        guiItemStack = secretPlayer.hasGift() ? secretPlayer.getGift() :
+                (clickedItemStack != null ? clickedItemStack : noGiftStack.getGuiItem());
+
+        staticPane.addItem(new GuiItem(guiItemStack, inventoryClickEvent -> {
 
             if(!inventoryClickEvent.isLeftClick()) {
                 return;
@@ -173,15 +164,37 @@ public class SecretSantaGiftEditInv {
                 // the player can change the gift for X money -> system
 
                 giftStack.getActionHandlers().forEach(ActionHandler::handleAction);
+                player.getInventory().addItem(secretPlayer.getGift());
             } else {
 
                 // the player can add a gift to the system
                 // open SecretSantaGiftEditApplyInv if he clicks an item on the players inventory
                 // SecretSantaGiftEditApplyInv -> sending clicked ItemStack
-
                 noGiftStack.getActionHandlers().forEach(ActionHandler::handleAction);
             }
         }), slot);
+
+        if(clickedItemStack != null &! secretPlayer.hasGift()) {
+            staticPane.addItem(new GuiItem(accept.getItemStack(), inventoryClickEvent -> {
+
+                if(!inventoryClickEvent.isLeftClick()) {
+                    return;
+                }
+
+                // removes the selected Item from the Inventory and
+                // add this item to the storage file of the player
+                // and marked as a gift.
+                // TODO: Add the item to the storage file of the player
+                LightMaster.instance.getDebugPrinting().print("Gift stack before in SaveGiftClick: " + this.clickedItemStack);
+                player.getInventory().remove(this.clickedItemStack);
+                secretPlayer.setGift(clickedItemStack);
+                LightMaster.instance.getDebugPrinting().print("Gift stack after in SaveGiftClick: " + clickedItemStack);
+
+                // execute the actions from the clickItemHandler -> file
+                accept.getActionHandlers().forEach(ActionHandler::handleAction);
+
+            }), accept.getSlot());
+        }
 
         return staticPane;
     }
@@ -222,6 +235,9 @@ public class SecretSantaGiftEditInv {
 
                 // execute the actions from the clickItemHandler -> file
                 clickItemHandler.getActionHandlers().forEach(ActionHandler::handleAction);
+
+
+
                 clickCooldown.add(player);
             }));
         }
@@ -240,6 +256,7 @@ public class SecretSantaGiftEditInv {
 
         gui.addPane(getPatternPane());
         gui.addPane(getExtraPane());
+
 
         gui.update();
     }

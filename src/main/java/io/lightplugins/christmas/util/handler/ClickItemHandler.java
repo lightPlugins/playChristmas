@@ -1,5 +1,6 @@
 package io.lightplugins.christmas.util.handler;
 
+import com.github.stefvanschie.inventoryframework.pane.util.Slot;
 import io.lightplugins.christmas.LightMaster;
 import io.lightplugins.christmas.util.NumberFormatter;
 import io.lightplugins.christmas.util.SkullUtil;
@@ -47,13 +48,14 @@ public class ClickItemHandler {
     private final Map<String, String> placeholders = new HashMap<>();
     private int modelData;
     private String headData;
+    private Slot slot;
 
     private ItemStack itemStack;
     private ItemMeta itemMeta;
 
     private final List<String> actionsSection;
     private final List<ActionHandler> actionHandlers = new ArrayList<>();
-    private int extraSlot = 4;
+    private int extraSlot = 1;
 
     // Extra requirements section for custom advent calendar plugin
     // This section is used for separate configuration data for example: rewards: -> '0' -> rewards: / requirements: ...
@@ -94,9 +96,8 @@ public class ClickItemHandler {
      * @param extraSection the extra section to set
      */
     public void setExtraSection(ConfigurationSection extraSection) {
-        this.EXTRA_SECTION = extraSection;
+        this.EXTRA_SECTION = extraSection.getConfigurationSection("args");
         if(EXTRA_SECTION != null) {
-            this.extraSlot = EXTRA_SECTION.getInt("slot");
             readExtraRequirements();
             readExtraActions();
         }
@@ -162,6 +163,7 @@ public class ClickItemHandler {
     private void readItemVariables() {
 
         this.item = GUI_ITEM_ARGS.getString("item");
+        this.slot = Slot.fromIndex(GUI_ITEM_ARGS.getInt("slot"));
         this.displayName = GUI_ITEM_ARGS.getString("display-name");
         this.lore = GUI_ITEM_ARGS.getStringList("lore");
         this.headData = GUI_ITEM_ARGS.getString("head-data");

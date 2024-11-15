@@ -1,0 +1,12 @@
+gift:
+  ==: org.bukkit.inventory.ItemStack
+  v: 3955
+  type: GRASS_BLOCK
+  meta:
+    ==: ItemMeta
+    meta-type: UNSPECIFIC
+    PublicBukkitValues: |-
+      {
+          "playchristmas:if-uuid": [B; 46B, -6B, 44B, 101B, 65B, -106B, 69B, 53B, -94B, -94B, -93B, 77B, 82B, -12B, 111B, -21B]
+      }
+votes: 0
