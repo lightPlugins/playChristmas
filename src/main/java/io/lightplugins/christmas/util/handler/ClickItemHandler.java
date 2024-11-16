@@ -232,6 +232,31 @@ public class ClickItemHandler {
                 }
             }
 
+            // Check if the split contains enchantments and apply them
+            if(split.contains("enchant") &! split.contains("hide_enchants")) {
+                String[] enchantSplit = split.split(":");
+
+                if(enchantSplit.length > 3) {
+                    LightMaster.instance.getDebugPrinting().configError("Invalid enchantment: " + enchantSplit[1] + " in file: "
+                            + GUI_ITEM_ARGS.getCurrentPath());
+                    LightMaster.instance.getDebugPrinting().configError("Enchantment must be a valid enchantment.");
+                    LightMaster.instance.getDebugPrinting().configError("Syntax: enchant:flame");
+                } else {
+                    // Enchantment.getByName() is deprecated, but it is still used in this code
+                    // TODO: find a better way to get enchantments from the string
+                    Enchantment enchantment = Enchantment.getByName(enchantSplit[1].toUpperCase());
+                    int level = Integer.parseInt(enchantSplit[2]);
+                    if(enchantment != null) {
+                        itemMeta.addEnchant(enchantment, level, true);
+                    } else {
+                        LightMaster.instance.getDebugPrinting().configError("Invalid enchantment: " + enchantSplit[1] + " in file: "
+                                + GUI_ITEM_ARGS.getCurrentPath());
+                        LightMaster.instance.getDebugPrinting().configError("Enchantment must be a valid enchantment.");
+                        LightMaster.instance.getDebugPrinting().configError("Syntax: enchant:flame");
+                    }
+                }
+            }
+
             // Check if the item should glow
             if(split.equalsIgnoreCase("glow")) {
                 itemMeta.addEnchant(Enchantment.FLAME, 1, true);

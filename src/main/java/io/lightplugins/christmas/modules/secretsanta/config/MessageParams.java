@@ -17,6 +17,12 @@ public class MessageParams {
     public String noPermission() { return config.getString("noPermission"); }
     public String moduleReload() { return config.getString("moduleReload"); }
     public String reloadAll() { return config.getString("reloadAll"); }
+    public String addPartnerSuccess() { return config.getString("addPartnerSuccess"); }
+    public String addPartnerNotFound() { return config.getString("addPartnerNotFound"); }
     public String wrongSyntax() { return config.getString("wrongSyntax"); }
+
+    // Titles
+    public String addPartnerTitleUpper() { return config.getString("titles.addPartner.upper"); }
+    public String addPartnerTitleLower() { return config.getString("titles.addPartner.lower"); }
 
 }

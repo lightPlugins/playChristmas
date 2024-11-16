@@ -20,14 +20,11 @@ import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * AdventCalendarInv
@@ -162,7 +159,7 @@ public class AdventCalendarInv {
             finalClickHandler.setExtraSection(rewardSection.getConfigurationSection(rewardKey));
 
             int day = Integer.parseInt(rewardKey);
-            Slot slot = Slot.fromIndex(finalClickHandler.getExtraSlot());
+            Slot slot = Slot.fromIndex(rewardSection.getInt(rewardKey + ".slot"));
 
             finalClickHandler.replaceLoreLine("#day#",
                     String.valueOf(day));

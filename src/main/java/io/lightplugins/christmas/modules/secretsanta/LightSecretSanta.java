@@ -1,11 +1,12 @@
 package io.lightplugins.christmas.modules.secretsanta;
 
 import io.lightplugins.christmas.LightMaster;
-import io.lightplugins.christmas.modules.adventcalendar.api.models.AdventPlayer;
 import io.lightplugins.christmas.modules.secretsanta.api.models.SecretPlayer;
 import io.lightplugins.christmas.modules.secretsanta.commands.OpenMainInv;
+import io.lightplugins.christmas.modules.secretsanta.commands.ReloadCommand;
 import io.lightplugins.christmas.modules.secretsanta.config.MessageParams;
 import io.lightplugins.christmas.modules.secretsanta.config.SettingParams;
+import io.lightplugins.christmas.modules.secretsanta.listener.OnChatEvent;
 import io.lightplugins.christmas.modules.secretsanta.listener.OnJoinEvent;
 import io.lightplugins.christmas.util.SubCommand;
 import io.lightplugins.christmas.util.interfaces.LightModule;
@@ -39,10 +40,9 @@ public class LightSecretSanta implements LightModule {
     private FileManager language;
 
     private FileManager secretSantaMainInv;
-    private FileManager secretsantaGiftEditor;
+    private FileManager secretSantaGiftEditor;
     private FileManager secretSantaSuggestionInv;
     private FileManager secretSantaRatingInv;
-    private FileManager secretsantaGiftEditApply;
 
     private MultiFileManager playerDataFiles;
 
@@ -101,10 +101,8 @@ public class LightSecretSanta implements LightModule {
                 LightMaster.instance, getName() + "/inventories/secretsanta-suggestion.yml", false);
         this.secretSantaRatingInv = new FileManager(
                 LightMaster.instance, getName() + "/inventories/secretsanta-rating.yml", false);
-        this.secretsantaGiftEditor = new FileManager(
+        this.secretSantaGiftEditor = new FileManager(
                 LightMaster.instance, getName() + "/inventories/secretsanta-gift-edit.yml", false);
-        this.secretsantaGiftEditApply = new FileManager(
-                LightMaster.instance, getName() + "/inventories/secretsanta-gift-edit-apply.yml", false);
 
 
         if(!secretPlayerData.isEmpty()) {
@@ -131,12 +129,14 @@ public class LightSecretSanta implements LightModule {
     private void initSubCommands() {
         PluginCommand pluginCommand = LightMaster.instance.getCommand("secretsanta");
         subCommands.add(new OpenMainInv());
+        subCommands.add(new ReloadCommand());
         new CommandManager(pluginCommand, subCommands);
     }
 
     private void registerEvents() {
         PluginManager pluginManager = Bukkit.getPluginManager();
         pluginManager.registerEvents(new OnJoinEvent(), LightMaster.instance);
+        pluginManager.registerEvents(new OnChatEvent(), LightMaster.instance);
 
     }
 

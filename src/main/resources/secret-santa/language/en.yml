@@ -6,3 +6,9 @@ wrongSyntax: '<red>Wrong command syntax. <gray>Please use <red>#syntax#'
 noNumber: '<red>This is not a number! Please use valid numbers.'
 onlyPositive: '<red>This is not a positive number! Please use only positive numbers.'
 playerNotFound: '<red>The player <dark_red>#player#<red> could not be found!'
+addPartnerNotFound: '<red>The partner <dark_red>#partner#<red> could not be found!'
+addPartnerSuccess: '<gray>The partner <#ffdc73>#partner#<gray> has been successfully added!'
+titles:
+  addPartner:
+    upper: '<#ffdc73>Partner hinzufügen'
+    lower: '<gray>Bitte gib den Namen des Partners in den Chat ein.'

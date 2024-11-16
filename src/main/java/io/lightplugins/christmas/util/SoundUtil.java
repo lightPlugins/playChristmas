@@ -19,4 +19,11 @@ public class SoundUtil {
         player.playSound(player.getLocation(), sound, volume, pitch);
     }
 
+    public static void onAttention(Player player) {
+        Sound sound = Sound.BLOCK_AMETHYST_CLUSTER_BREAK;
+        float volume = 0.75f;
+        float pitch = 0.8f;
+        player.playSound(player.getLocation(), sound, volume, pitch);
+    }
+
 }

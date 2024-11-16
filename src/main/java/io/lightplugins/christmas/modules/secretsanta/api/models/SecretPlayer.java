@@ -1,8 +1,8 @@
 package io.lightplugins.christmas.modules.secretsanta.api.models;
 
-import io.lightplugins.christmas.LightMaster;
-import io.lightplugins.christmas.util.Base64Converter;
 import lombok.Getter;
+import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
@@ -17,8 +17,10 @@ public class SecretPlayer {
 
     private final File playerDataFile;
     private ItemStack gift;
-    private UUID partner;
+    private UUID partnerUUD;
+    private OfflinePlayer partner;
     private int votes;
+    private boolean inCheckChat;
 
     public SecretPlayer(File playerDataFile) {
         this.playerDataFile = playerDataFile;
@@ -33,8 +35,17 @@ public class SecretPlayer {
     }
     // check if player has a gift, if not gift is null
     public boolean hasGift() { return gift != null; }
+    // check if player has a partner, if not partner is null
+    public boolean hasPartner() { return partner != null; }
+    // get the amount of votes a player has for his gift
     public Integer getVotes() { return votes; }
+    // set the chat check status
+    public void setChatCheck(boolean status) { this.inCheckChat = status; }
 
+    /**
+     * Initialize a new player data file and return the SecretPlayer instance
+     * @return SecretPlayer instance
+     */
     public SecretPlayer initNewPlayer() {
 
         // Generate data into the player storage file
@@ -49,20 +60,20 @@ public class SecretPlayer {
             config.save(playerDataFile);
 
             return this;
-        } catch (Exception e) {
+        } catch (IOException e) {
             throw new RuntimeException("Error creating new player data file for player", e);
         }
     }
-
+    /**
+     * Load the gift of the player
+     */
     private void loadGift() {
         // Load gift from file
         FileConfiguration config = YamlConfiguration.loadConfiguration(playerDataFile);
+        ItemStack gift = config.getItemStack("gift-data");
 
-        if(config.contains("gift")) {
-            // deserialize itemstack
-            String base64 = config.getString("gift");
-            this.gift = Base64Converter.itemStackFromBase64(base64);
-
+        if(gift != null) {
+            this.gift = gift.clone();
         }
     }
 
@@ -73,47 +84,53 @@ public class SecretPlayer {
         if(config.contains("gift-partner")) {
             String configUUID = config.getString("gift-partner");
             if(configUUID == null) {
-                this.partner = null;
+                this.partnerUUD = null;
                 return;
             }
-            this.partner = UUID.fromString(configUUID);
+
+            this.partnerUUD = UUID.fromString(configUUID);
+            this.partner = Bukkit.getOfflinePlayer(this.partnerUUD);
         }
     }
-
+    /**
+     * Set the gift of the player
+     * @param gift ItemStack to set as gift
+     */
     public void setGift(ItemStack gift) {
-        // Save gift to file
+        // Save gift clone to file
         FileConfiguration config = YamlConfiguration.loadConfiguration(playerDataFile);
-
-        String base64 = Base64Converter.itemStackToBase64(gift);
-
-        LightMaster.instance.getDebugPrinting().print("Gift stack in SecretPlayer: " + gift);
-
-        config.set("gift", base64);
-        config.set("gift-data", gift);
-        this.gift = gift;
+        config.set("gift-data", gift.clone());
+        this.gift = gift.clone();
 
         try {
             config.save(playerDataFile);
-            LightMaster.instance.getDebugPrinting().print("config stack: " + config.getItemStack("gift"));
         } catch (Exception e) {
             throw new RuntimeException("Error saving gift data to file", e);
         }
     }
 
-    public void setPartner(UUID partner) {
-        // Save partner to file
+    /**
+     * Set the partner of the player
+     * @param partnerUUID UUID of the partner
+     */
+    public void setPartner(UUID partnerUUID) {
+        // Save a partner to file
         FileConfiguration config = YamlConfiguration.loadConfiguration(playerDataFile);
 
-        config.set("gift-partner", partner.toString());
-        this.partner = partner;
+        config.set("gift-partner", partnerUUID.toString());
+        this.partnerUUD = partnerUUID;
 
         try {
             config.save(playerDataFile);
-        } catch (Exception e) {
+            this.partner = Bukkit.getOfflinePlayer(partnerUUID);
+        } catch (IOException e) {
             throw new RuntimeException("Error saving partner data to file", e);
         }
     }
 
+    /**
+     * Add a vote to the player
+     */
     public void addVote() {
         // Save votes to file
         FileConfiguration config = YamlConfiguration.loadConfiguration(playerDataFile);
@@ -123,9 +140,17 @@ public class SecretPlayer {
 
         try {
             config.save(playerDataFile);
-        } catch (Exception e) {
+        } catch (IOException e) {
             throw new RuntimeException("Error saving votes data to file", e);
         }
+    }
+    /**
+     * Get the gift of the player
+     * IMPORTANT: Clone the ItemStack before using it !!!
+     * @return cloned ItemStack gift
+     */
+    public ItemStack getGift() {
+        return this.gift.clone();
     }
 
 }

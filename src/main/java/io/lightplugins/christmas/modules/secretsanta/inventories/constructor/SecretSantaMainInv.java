@@ -7,6 +7,9 @@ import com.github.stefvanschie.inventoryframework.pane.PatternPane;
 import com.github.stefvanschie.inventoryframework.pane.StaticPane;
 import com.github.stefvanschie.inventoryframework.pane.util.Pattern;
 import io.lightplugins.christmas.LightMaster;
+import io.lightplugins.christmas.modules.secretsanta.LightSecretSanta;
+import io.lightplugins.christmas.modules.secretsanta.api.models.SecretPlayer;
+import io.lightplugins.christmas.util.SoundUtil;
 import io.lightplugins.christmas.util.constructor.InvConstructor;
 import io.lightplugins.christmas.util.handler.ActionHandler;
 import io.lightplugins.christmas.util.handler.ClickItemHandler;
@@ -37,7 +40,7 @@ public class SecretSantaMainInv {
 
     private final ChestGui gui = new ChestGui(6, "Init");
     private final InvConstructor invConstructor;
-    private final ConfigurationSection rewardSection;
+    private final ConfigurationSection extraSection;
     private final Player player;
     private BukkitTask bukkitTask;
     private final int refreshRate = 20;
@@ -45,6 +48,7 @@ public class SecretSantaMainInv {
     private final List<Player> failCooldown = new ArrayList<>();
     private final int cooldownTime = 3;
     private final int failCooldownTime = 20;
+    private final SecretPlayer secretPlayer;
 
     /**
      * Constructor for the AdventCalendarInv
@@ -59,8 +63,14 @@ public class SecretSantaMainInv {
             Player player) {
 
         this.invConstructor = invConstructor;
-        this.rewardSection = extraSection;
+        this.extraSection = extraSection;
         this.player = player;
+
+        this.secretPlayer = LightSecretSanta.instance.getSecretPlayerData().stream()
+                .filter(playerData -> playerData.getPlayerDataFile().getName().replace(".yml", "")
+                        .equalsIgnoreCase(player.getUniqueId().toString()))
+                .findFirst()
+                .orElseThrow(() -> new IllegalStateException("SecretPlayer not found for player: " + player.getUniqueId()));
     }
 
     /**
@@ -82,9 +92,52 @@ public class SecretSantaMainInv {
             }
         });
 
-        gui.addPane(getExtraPane());
+        gui.addPane(getGiftAddPane());
+        gui.addPane(getPartnerPane());
         gui.addPane(getPatternPane());
+
+
         gui.show(player);
+    }
+
+    @NotNull
+    private StaticPane getGiftAddPane() {
+
+        StaticPane staticPane = new StaticPane(0, 0, 9, 5);
+
+        ClickItemHandler noPartnerGiftAdd = new ClickItemHandler(
+                Objects.requireNonNull(extraSection.getConfigurationSection("missing-partner-gift")), player);
+        ClickItemHandler partnerGiftAdd = new ClickItemHandler(
+                Objects.requireNonNull(extraSection.getConfigurationSection("partner-gift")), player);
+
+        ItemStack guiItem = secretPlayer.hasPartner() ? partnerGiftAdd.getGuiItem() : noPartnerGiftAdd.getGuiItem();
+
+        staticPane.addItem(new GuiItem(guiItem, inventoryClickEvent -> {
+
+            if(!inventoryClickEvent.isLeftClick()) {
+                return;
+            }
+
+            if(failCooldown.contains(player)) {
+                return;
+            }
+
+            if(secretPlayer.hasPartner()) {
+                partnerGiftAdd.getActionHandlers().forEach(ActionHandler::handleAction);
+                return;
+            }
+
+            noPartnerGiftAdd.getActionHandlers().forEach(ActionHandler::handleAction);
+            SoundUtil.onFail(player);
+            failCooldown.add(player);
+            Bukkit.getScheduler().runTaskLater(LightMaster.instance, () -> {
+                failCooldown.remove(player);
+            }, failCooldownTime);
+
+
+        }), secretPlayer.hasPartner() ? partnerGiftAdd.getSlot() : noPartnerGiftAdd.getSlot());
+
+        return staticPane;
     }
 
     /**
@@ -92,13 +145,40 @@ public class SecretSantaMainInv {
      * @return StaticPane for the extra items (day rewards)
      */
     @NotNull
-    private StaticPane getExtraPane() {
+    private StaticPane getPartnerPane() {
 
         StaticPane staticPane = new StaticPane(0, 0, 9, 5);
 
-        for(String rewardKey : rewardSection.getKeys(false)) {
+        ClickItemHandler partnerStack = new ClickItemHandler(
+                Objects.requireNonNull(extraSection.getConfigurationSection("partner")), player);
+        ClickItemHandler noPartnerStack = new ClickItemHandler(
+                Objects.requireNonNull(extraSection.getConfigurationSection("no-partner")), player);
 
+        if(secretPlayer.hasPartner()) {
+            partnerStack.replaceLoreLine("#partner#", secretPlayer.getPartner().getName());
         }
+
+        ItemStack guiItem = secretPlayer.hasPartner() ? partnerStack.getGuiItem() : noPartnerStack.getGuiItem();
+
+        staticPane.addItem(new GuiItem(guiItem, inventoryClickEvent -> {
+
+            if(!inventoryClickEvent.isLeftClick()) {
+                return;
+            }
+
+            if(!secretPlayer.hasPartner()) {
+                secretPlayer.setChatCheck(true);
+                player.closeInventory();
+                String upperTitle = LightSecretSanta.messageParams.addPartnerTitleUpper();
+                String lowerTitle = LightSecretSanta.messageParams.addPartnerTitleLower();
+                LightMaster.instance.getMessageSender().sendTitle(upperTitle, lowerTitle, player);
+                SoundUtil.onAttention(player);
+                return;
+            } else {
+                SoundUtil.onFail(player);
+            }
+
+        }), secretPlayer.hasPartner() ? partnerStack.getSlot() : noPartnerStack.getSlot());
 
         return staticPane;
     }
@@ -154,9 +234,10 @@ public class SecretSantaMainInv {
     private void update() {
 
         gui.getPanes().forEach(Pane::clear);
-
+        gui.addPane(getGiftAddPane());
         gui.addPane(getPatternPane());
-        gui.addPane(getExtraPane());
+        gui.addPane(getPartnerPane());
+
 
         gui.update();
     }

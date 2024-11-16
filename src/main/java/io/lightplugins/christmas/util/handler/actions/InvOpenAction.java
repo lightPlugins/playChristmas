@@ -13,7 +13,7 @@ public class InvOpenAction implements LightAction {
         if(actionDataArray[1].equalsIgnoreCase("secretsanta-gift-edit")) {
             // SecretSantaGiftEdit
             SecretSantaGiftEditInv secretSantaGiftEditInv = LightMaster.instance.getInventoryManager().generateSecretSantaGiftEditInv(
-                    LightSecretSanta.instance.getSecretsantaGiftEditor(),
+                    LightSecretSanta.instance.getSecretSantaGiftEditor(),
                     player);
             secretSantaGiftEditInv.openInventory();
             return;

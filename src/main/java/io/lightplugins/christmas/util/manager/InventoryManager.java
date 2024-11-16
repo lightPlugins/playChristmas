@@ -57,6 +57,7 @@ public class InventoryManager {
         int row = conf.getInt("rows");
         List<String> pattern = conf.getStringList("pattern");
         ConfigurationSection clickContent = conf.getConfigurationSection("contents");
+        ConfigurationSection extrasContent = conf.getConfigurationSection("extras");
 
         invConstructor.setGuiName(guiName);
         invConstructor.setGuiTitle(title);
@@ -66,7 +67,7 @@ public class InventoryManager {
 
         return new SecretSantaMainInv(
                 invConstructor,
-                clickContent,
+                extrasContent,
                 player);
 
     }
