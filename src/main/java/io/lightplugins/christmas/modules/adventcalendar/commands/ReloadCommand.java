@@ -55,6 +55,7 @@ public class ReloadCommand extends SubCommand {
         LightMaster.instance.getMessageSender().sendPlayerMessage(
                 LightAdventCalendar.instance.getMessageParams().moduleReload()
                         .replace("#module#", "Adventskalender"), player);
+
         return true;
     }
 

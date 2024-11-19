@@ -79,9 +79,11 @@ public class LightMaster extends JavaPlugin {
 
         debugPrinting.print("Loading " + pluginName + " modules...");
         messageSender = new MessageSender();
+
         initModules();
         loadModules();
         registerPlaceHolders();
+
 
     }
 
