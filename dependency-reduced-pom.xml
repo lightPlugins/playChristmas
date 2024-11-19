@@ -118,6 +118,13 @@
       <version>4.17.0</version>
       <scope>provided</scope>
     </dependency>
+    <dependency>
+      <groupId>io.lightstudios</groupId>
+      <artifactId>lightcore</artifactId>
+      <version>0.1.0</version>
+      <scope>system</scope>
+      <systemPath>C:/Users/phili/Desktop/playnayz development/plugins/lightCore-0.1.0-SNAPSHOT.jar</systemPath>
+    </dependency>
   </dependencies>
   <properties>
     <java.version>17</java.version>

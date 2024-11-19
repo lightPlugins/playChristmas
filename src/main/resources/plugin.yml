@@ -19,3 +19,6 @@ commands:
   sledhunt:
     description: The root command for the module sledhunt
     aliases: [sh, schlittenjagd]
+  test:
+    description: test command
+    aliases: [ ]
