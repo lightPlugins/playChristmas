@@ -174,6 +174,7 @@ public class AdventCalendarInv {
             List<String> replacementLore = new ArrayList<>();
 
             finalClickHandler.getExtraActionHandlers().forEach(singleActionHandler -> {
+                LightMaster.instance.getDebugPrinting().print("TEST: " + singleActionHandler.getRewardNames().toString());
                 singleActionHandler.getRewardNames().forEach(rewardName -> {
                     String rewardReplacement = LightMaster.instance.colorTranslation.loreLineTranslation(
                             rewardName, player);

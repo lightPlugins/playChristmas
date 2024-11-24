@@ -96,7 +96,7 @@ public class ClickItemHandler {
      * @param extraSection the extra section to set
      */
     public void setExtraSection(ConfigurationSection extraSection) {
-        this.EXTRA_SECTION = extraSection.getConfigurationSection("args");
+        this.EXTRA_SECTION = extraSection;
         if(EXTRA_SECTION != null) {
             readExtraRequirements();
             readExtraActions();
@@ -411,6 +411,7 @@ public class ClickItemHandler {
      */
     private void readExtraActions() {
         this.extraActionsSection = EXTRA_SECTION.getStringList("actions");
+        LightMaster.instance.getDebugPrinting().configError("Extra actions: " + extraActionsSection);
 
         extraActionsSection.forEach(action -> {
             for(String key : placeholders.keySet()) {

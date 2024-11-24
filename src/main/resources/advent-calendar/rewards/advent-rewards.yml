@@ -54,6 +54,7 @@ rewards:
     slot: 11
     actions:
       - 'give-item;diamond 1'
+      - 'booster;break:1'
       - 'send-message;<green>Du hast einen Diamanten erhalten.'
     requirements:
       - 'date;01.11.2024 00:00'

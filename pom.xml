@@ -38,7 +38,7 @@
 
         <repository>
             <id>dmulloy2-repo</id>
-            <url>https://repo.dmulloy2.net/nexus/repository/public/</url>
+            <url>https://repo.dmulloy2.net/repository/public/</url>
         </repository>
 
         <repository>
@@ -60,15 +60,6 @@
             <artifactId>spigot-api</artifactId>
             <version>1.21.1-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
-        </dependency>
-
-        <!-- LightCore API -->
-        <dependency>
-            <groupId>io.lightstudios</groupId>
-            <artifactId>lightcore</artifactId>
-            <version>0.1.0</version>
-            <scope>system</scope>
-            <systemPath>C:/Users/phili/Desktop/playnayz development/plugins/lightCore-0.1.0-SNAPSHOT.jar</systemPath>
         </dependency>
 
         <dependency>

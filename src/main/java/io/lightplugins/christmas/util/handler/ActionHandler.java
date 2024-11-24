@@ -6,10 +6,7 @@ import io.lightplugins.christmas.util.interfaces.LightAction;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * This class handles actions for a player based on provided action data.
@@ -41,6 +38,7 @@ public class ActionHandler {
         actions.put("player-cmd", new PlayerCmdAction());
         actions.put("console-cmd", new ConsoleCmdAction());
         actions.put("open-inventory", new InvOpenAction());
+        actions.put("booster", new BoosterAction());
     }
 
     public String[] getActions() {
@@ -64,6 +62,7 @@ public class ActionHandler {
 
         switch (actionDataArray[0]) {
             case "give-item" -> rewardNames.add(rewardItem());
+            case "booster" -> rewardNames.add(boosterName());
             case "dummy" -> rewardNames.add("dummy");
         }
 
@@ -74,6 +73,7 @@ public class ActionHandler {
         if (actionDataArray.length < 2) {
             return "Invalid item data";
         }
+
         String itemName = actionDataArray[1];
         String[] itemNameArray = itemName.split(" ");
         itemName = itemName.substring(0, 1).toUpperCase()
@@ -81,4 +81,17 @@ public class ActionHandler {
 
         return "<#ffdc73>" + itemNameArray[1] + "<gray> x <#ffdc73>" + itemName;
     }
+
+    private String boosterName() {
+        if (actionDataArray.length < 2) {
+            return "Invalid item data";
+        }
+
+        String[] boosterArray = actionDataArray[1].split(":");
+        String boosterName = boosterArray[0].substring(0, 1).toUpperCase() + boosterArray[0].substring(1);
+        int boosterAmount = Integer.parseInt(boosterArray[1]);
+        return "<#ffdc73>" + boosterAmount + "<gray> x <#ffdc73>" + boosterName + " <gray>Booster";
+
+    }
+
 }
