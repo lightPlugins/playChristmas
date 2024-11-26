@@ -2,18 +2,27 @@ package io.lightplugins.christmas.modules.secretsanta.inventories.constructor;
 
 import com.github.stefvanschie.inventoryframework.gui.GuiItem;
 import com.github.stefvanschie.inventoryframework.gui.type.ChestGui;
+import com.github.stefvanschie.inventoryframework.pane.PaginatedPane;
 import com.github.stefvanschie.inventoryframework.pane.Pane;
 import com.github.stefvanschie.inventoryframework.pane.PatternPane;
 import com.github.stefvanschie.inventoryframework.pane.StaticPane;
 import com.github.stefvanschie.inventoryframework.pane.util.Pattern;
 import io.lightplugins.christmas.LightMaster;
+import io.lightplugins.christmas.modules.secretsanta.LightSecretSanta;
+import io.lightplugins.christmas.modules.secretsanta.api.models.SecretPlayer;
+import io.lightplugins.christmas.modules.secretsanta.config.MessageParams;
+import io.lightplugins.christmas.util.MessageSender;
+import io.lightplugins.christmas.util.SoundUtil;
 import io.lightplugins.christmas.util.constructor.InvConstructor;
 import io.lightplugins.christmas.util.handler.ActionHandler;
 import io.lightplugins.christmas.util.handler.ClickItemHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.entity.LightningStrike;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.ItemMergeEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
 
@@ -82,8 +91,10 @@ public class SecretSantaRatingInv {
             }
         });
 
+        gui.addPane(getGiftPage());
         gui.addPane(getExtraPane());
         gui.addPane(getPatternPane());
+
         gui.show(player);
     }
 
@@ -101,6 +112,89 @@ public class SecretSantaRatingInv {
         }
 
         return staticPane;
+    }
+
+    @NotNull
+    private PaginatedPane getGiftPage() {
+
+        // get all gifts and add these to an PaginatedPane
+        PaginatedPane paginatedPane = new PaginatedPane(1, 1, 8, gui.getRows());
+        List<GuiItem> allGifts = new ArrayList<>();
+
+        // add all gifts to the list
+
+        for(SecretPlayer secretPlayer : LightSecretSanta.instance.getSecretPlayerData()) {
+
+            if(secretPlayer.getGift() == null) {
+                continue;
+            }
+
+            ItemStack is = secretPlayer.getGift();
+            ItemMeta im = is.getItemMeta();
+
+            if(im == null) {
+                throw new RuntimeException("This Gift does not have an ItemMeta!");
+            }
+
+            List<String> currentLore = im.getLore();
+
+            if(currentLore == null) {
+                currentLore = new ArrayList<>();
+            }
+
+            currentLore.add(" ");
+            currentLore.add(LightMaster.instance.colorTranslation.loreLineTranslation(
+                    "<#ffdc73>Aktuelle Votes: <gray>" + secretPlayer.getVotes(), player));
+
+            im.setLore(currentLore);
+            is.setItemMeta(im);
+
+            allGifts.add(new GuiItem(is, inventoryClickEvent -> {
+
+                if(!inventoryClickEvent.isLeftClick()) {
+                    return;
+                }
+
+                // AntiSpam protection for general actions
+                if(clickCooldown.contains(player)) {
+                    return;
+                }
+
+                Bukkit.getScheduler().runTaskLater(LightMaster.instance, () -> {
+                    clickCooldown.remove(player);
+                }, cooldownTime);
+
+                clickCooldown.add(player);
+
+                if(secretPlayer.hasPlayerDataFile(player.getUniqueId().toString())) {
+                    if(!secretPlayer.hasVoted()) {
+
+                        String formatedMaterialName =
+                                secretPlayer.getGift().getType().toString().toLowerCase().replace("_", " ");
+                        secretPlayer.setVoted();
+                        secretPlayer.addVote();
+                        LightMaster.instance.getMessageSender().sendPlayerMessage(
+                                LightSecretSanta.messageParams.successVoted()
+                                        .replace("#gift#", formatedMaterialName), player);
+                        SoundUtil.onSuccess(player);
+                        update();
+                        return;
+                    }
+
+                    LightMaster.instance.getMessageSender().sendPlayerMessage(
+                            LightSecretSanta.messageParams.alreadyVoted(), player);
+                    SoundUtil.onFail(player);
+
+                } else {
+                    SoundUtil.onFail(player);
+                    LightMaster.instance.getDebugPrinting().print("ZZZ Thats not you! ");
+                }
+
+            }));
+        }
+
+        paginatedPane.populateWithGuiItems(allGifts);
+        return paginatedPane;
     }
 
     /**
@@ -155,8 +249,9 @@ public class SecretSantaRatingInv {
 
         gui.getPanes().forEach(Pane::clear);
 
-        gui.addPane(getPatternPane());
+        gui.addPane(getGiftPage());
         gui.addPane(getExtraPane());
+        gui.addPane(getPatternPane());
 
         gui.update();
     }

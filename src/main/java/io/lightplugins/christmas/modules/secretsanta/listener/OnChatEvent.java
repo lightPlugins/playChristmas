@@ -3,6 +3,7 @@ package io.lightplugins.christmas.modules.secretsanta.listener;
 import io.lightplugins.christmas.LightMaster;
 import io.lightplugins.christmas.modules.secretsanta.LightSecretSanta;
 import io.lightplugins.christmas.modules.secretsanta.api.models.SecretPlayer;
+import io.lightplugins.christmas.modules.secretsanta.inventories.constructor.SecretSantaMainInv;
 import io.lightplugins.christmas.util.SoundUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -41,6 +42,16 @@ public class OnChatEvent implements Listener {
                     );
                     SoundUtil.onSuccess(player);
                     secretPlayer.setChatCheck(false);
+
+                    Bukkit.getScheduler().runTask(LightMaster.instance, () -> {
+                        SecretSantaMainInv secretSantaInv = LightSecretSanta.instance.getInventoryManager().generateSecretSantaMainInv(
+                                LightSecretSanta.instance.getSecretSantaMainInv(),
+                                player
+                        );
+
+                        secretSantaInv.openInventory();
+                    });
+
                     return;
                 }
             }

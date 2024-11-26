@@ -25,4 +25,10 @@ public class MessageParams {
     public String addPartnerTitleUpper() { return config.getString("titles.addPartner.upper"); }
     public String addPartnerTitleLower() { return config.getString("titles.addPartner.lower"); }
 
+    // Messages
+    public String successVoted() { return config.getString("successVoted"); }
+    public String alreadyVoted() { return config.getString("alreadyVoted"); }
+    public String voteNotStarted() { return config.getString("voteNotStarted"); }
+
+
 }

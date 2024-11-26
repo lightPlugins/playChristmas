@@ -2,6 +2,7 @@ package io.lightplugins.christmas.modules.secretsanta.api.models;
 
 import lombok.Getter;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -21,12 +22,15 @@ public class SecretPlayer {
     private OfflinePlayer partner;
     private int votes;
     private boolean inCheckChat;
+    private boolean hasVoted;
 
     public SecretPlayer(File playerDataFile) {
         this.playerDataFile = playerDataFile;
 
         loadPartner();
         loadGift();
+        loadHasVoted();
+        loadVotes();
     }
 
     // check if player has a data file
@@ -37,6 +41,8 @@ public class SecretPlayer {
     public boolean hasGift() { return gift != null; }
     // check if player has a partner, if not partner is null
     public boolean hasPartner() { return partner != null; }
+    // check if player has voted
+    public boolean hasVoted() { return hasVoted; }
     // get the amount of votes a player has for his gift
     public Integer getVotes() { return votes; }
     // set the chat check status
@@ -57,6 +63,7 @@ public class SecretPlayer {
             config.set("gift", null);
             config.set("gift-data", new ArrayList<>());
             config.set("votes", 0);
+            config.set("has-voted", false);
             config.save(playerDataFile);
 
             return this;
@@ -91,6 +98,18 @@ public class SecretPlayer {
             this.partnerUUD = UUID.fromString(configUUID);
             this.partner = Bukkit.getOfflinePlayer(this.partnerUUD);
         }
+    }
+
+    private void loadHasVoted() {
+        // Load has voted from file
+        FileConfiguration config = YamlConfiguration.loadConfiguration(playerDataFile);
+        this.hasVoted = config.getBoolean("has-voted");
+    }
+
+    private void loadVotes() {
+        // Load votes from file
+        FileConfiguration config = YamlConfiguration.loadConfiguration(playerDataFile);
+        this.votes = config.getInt("votes");
     }
     /**
      * Set the gift of the player
@@ -144,13 +163,31 @@ public class SecretPlayer {
             throw new RuntimeException("Error saving votes data to file", e);
         }
     }
+
+    public void setVoted() {
+
+        FileConfiguration config = YamlConfiguration.loadConfiguration(playerDataFile);
+
+        config.set("has-voted", true);
+        this.hasVoted = true;
+
+        try {
+            config.save(playerDataFile);
+        } catch (IOException e) {
+            throw new RuntimeException("Error saving vote data to file", e);
+        }
+
+    }
     /**
      * Get the gift of the player
      * IMPORTANT: Clone the ItemStack before using it !!!
      * @return cloned ItemStack gift
      */
     public ItemStack getGift() {
-        return this.gift.clone();
+        if(gift != null) {
+            return this.gift.clone();
+        }
+        return null;
     }
 
 }

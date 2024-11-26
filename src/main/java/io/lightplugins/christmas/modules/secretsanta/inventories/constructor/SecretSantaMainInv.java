@@ -162,20 +162,32 @@ public class SecretSantaMainInv {
 
         staticPane.addItem(new GuiItem(guiItem, inventoryClickEvent -> {
 
-            if(!inventoryClickEvent.isLeftClick()) {
-                return;
+            if(inventoryClickEvent.isLeftClick()) {
+                if(!secretPlayer.hasPartner()) {
+                    secretPlayer.setChatCheck(true);
+                    player.closeInventory();
+                    String upperTitle = LightSecretSanta.messageParams.addPartnerTitleUpper();
+                    String lowerTitle = LightSecretSanta.messageParams.addPartnerTitleLower();
+                    LightMaster.instance.getMessageSender().sendTitle(upperTitle, lowerTitle, player);
+                    SoundUtil.onAttention(player);
+                } else {
+                    SoundUtil.onFail(player);
+                }
             }
 
-            if(!secretPlayer.hasPartner()) {
-                secretPlayer.setChatCheck(true);
-                player.closeInventory();
-                String upperTitle = LightSecretSanta.messageParams.addPartnerTitleUpper();
-                String lowerTitle = LightSecretSanta.messageParams.addPartnerTitleLower();
-                LightMaster.instance.getMessageSender().sendTitle(upperTitle, lowerTitle, player);
-                SoundUtil.onAttention(player);
-                return;
-            } else {
-                SoundUtil.onFail(player);
+            if(inventoryClickEvent.isRightClick()) {
+                if(secretPlayer.hasPartner()) {
+                    // TODO: get the current amount of coins from the player
+                    //       and remove the coins to the partner (if he had enough)
+                    secretPlayer.setChatCheck(true);
+                    player.closeInventory();
+                    String upperTitle = LightSecretSanta.messageParams.addPartnerTitleUpper();
+                    String lowerTitle = LightSecretSanta.messageParams.addPartnerTitleLower();
+                    LightMaster.instance.getMessageSender().sendTitle(upperTitle, lowerTitle, player);
+                    SoundUtil.onAttention(player);
+                } else {
+                    SoundUtil.onFail(player);
+                }
             }
 
         }), secretPlayer.hasPartner() ? partnerStack.getSlot() : noPartnerStack.getSlot());

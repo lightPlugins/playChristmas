@@ -38,7 +38,9 @@ public class ActionHandler {
         actions.put("player-cmd", new PlayerCmdAction());
         actions.put("console-cmd", new ConsoleCmdAction());
         actions.put("open-inventory", new InvOpenAction());
+        actions.put("open-date-inventory", new OpenInvDateAction());
         actions.put("booster", new BoosterAction());
+        actions.put("coins-add", new CoinsAddAction());
     }
 
     public String[] getActions() {
@@ -63,6 +65,7 @@ public class ActionHandler {
         switch (actionDataArray[0]) {
             case "give-item" -> rewardNames.add(rewardItem());
             case "booster" -> rewardNames.add(boosterName());
+            case "coins-add" -> rewardNames.add(coinsAddName());
             case "dummy" -> rewardNames.add("dummy");
         }
 
@@ -91,6 +94,17 @@ public class ActionHandler {
         String boosterName = boosterArray[0].substring(0, 1).toUpperCase() + boosterArray[0].substring(1);
         int boosterAmount = Integer.parseInt(boosterArray[1]);
         return "<#ffdc73>" + boosterAmount + "<gray> x <#ffdc73>" + boosterName + " <gray>Booster";
+
+    }
+
+    private String coinsAddName() {
+
+        if (actionDataArray.length < 2) {
+            return "Invalid item data";
+        }
+
+        int amountToAdd = Integer.parseInt(actionDataArray[1]);
+        return "<#ffdc73>" + amountToAdd + " <gray>Coins";
 
     }
 

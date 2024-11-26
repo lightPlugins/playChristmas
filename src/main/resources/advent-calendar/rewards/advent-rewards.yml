@@ -54,7 +54,13 @@ rewards:
     slot: 11
     actions:
       - 'give-item;diamond 1'
+      # rbridge booster add <Booster> <SpielerName> <Amount>
+      # BREAK, DROP, FLY, STRENGHT, LEVEL, COINS, SPEED
       - 'booster;break:1'
+      # crate-keys:
+      - 'crate-key;break:1'
+      # /rbridge coins add <SpielerName> <Amount>
+      - 'coins-add;1000'
       - 'send-message;<green>Du hast einen Diamanten erhalten.'
     requirements:
       - 'date;01.11.2024 00:00'

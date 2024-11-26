@@ -8,6 +8,9 @@ onlyPositive: '<red>This is not a positive number! Please use only positive numb
 playerNotFound: '<red>The player <dark_red>#player#<red> could not be found!'
 addPartnerNotFound: '<red>The partner <dark_red>#partner#<red> could not be found!'
 addPartnerSuccess: '<gray>The partner <#ffdc73>#partner#<gray> has been successfully added!'
+successVoted: '<gray>You have successfully voted for the gift <#ffdc73>#gift#'
+alreadyVoted: '<red>You can only vote once!'
+voteNotStarted: '<red>The voting has not started yet! Please come back on <dark_red>#date#'
 titles:
   addPartner:
     upper: '<#ffdc73>Partner hinzufügen'
