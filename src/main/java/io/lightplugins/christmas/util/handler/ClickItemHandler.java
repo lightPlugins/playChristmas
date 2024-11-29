@@ -5,6 +5,7 @@ import io.lightplugins.christmas.LightMaster;
 import io.lightplugins.christmas.util.NumberFormatter;
 import io.lightplugins.christmas.util.SkullUtil;
 import lombok.Getter;
+import lombok.Setter;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -35,7 +36,7 @@ import java.util.*;
  * You may not use, distribute, or modify this code without explicit permission.
  */
 
-@Getter
+@Getter @Setter
 public class ClickItemHandler {
 
     private final ConfigurationSection GUI_ITEM_ARGS;
@@ -195,16 +196,11 @@ public class ClickItemHandler {
             return new ItemStack(Material.STONE, 1);
         }
 
-        OfflinePlayer offlinePlayer = Bukkit.getPlayer(headData);
-
         if(itemStack.getItemMeta() instanceof SkullMeta) {
-            if(offlinePlayer != null) {
-                itemStack = SkullUtil.getPlayerSkull(offlinePlayer.getPlayer());
-            } else {
-                LightMaster.instance.getDebugPrinting().configError("Invalid head data: " + headData + " in file: " + GUI_ITEM_ARGS.getCurrentPath());
-                LightMaster.instance.getDebugPrinting().configError("Head data must be a valid UUID or name.");
-                LightMaster.instance.getDebugPrinting().configError("It is set to the backup material -> Stone");
-                return new ItemStack(Material.STONE, 1);
+            if(!headData.isEmpty()) {
+                OfflinePlayer skullPlayer = Bukkit.getOfflinePlayer(UUID.fromString(headData));
+                LightMaster.instance.getDebugPrinting().print("Skull player: " + skullPlayer.getName());
+                itemStack = SkullUtil.getPlayerSkull(skullPlayer.getPlayer());
             }
         }
 
@@ -296,6 +292,10 @@ public class ClickItemHandler {
 
         List<String> newLore = new ArrayList<>();
 
+        if(itemMeta == null) {
+            return;
+        }
+
         if(itemMeta.getLore() == null) {
             return;
         }
@@ -307,8 +307,10 @@ public class ClickItemHandler {
             newLore.add(line);
         }
 
-        itemMeta.setLore(newLore);
-        itemStack.setItemMeta(itemMeta);
+        lore = newLore;
+
+        // itemMeta.setLore(newLore);
+        // itemStack.setItemMeta(itemMeta);
     }
 
     /**

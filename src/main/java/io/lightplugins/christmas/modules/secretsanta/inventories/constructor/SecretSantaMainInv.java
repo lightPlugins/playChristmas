@@ -151,13 +151,27 @@ public class SecretSantaMainInv {
 
         StaticPane staticPane = new StaticPane(0, 0, 9, 5);
 
+        SecretPlayer currentSecretPlayer = null;
+        for(SecretPlayer secretPlayer : LightSecretSanta.instance.getSecretPlayerData()) {
+            if(secretPlayer.getPlayerUUID().equals(player.getUniqueId())) {
+                currentSecretPlayer = secretPlayer;
+            }
+        }
+
+        if(currentSecretPlayer == null) {
+            throw new RuntimeException("This player does not have a SecretSanta file!");
+        }
+
         ClickItemHandler partnerStack = new ClickItemHandler(
                 Objects.requireNonNull(extraSection.getConfigurationSection("partner")), player);
+
         ClickItemHandler noPartnerStack = new ClickItemHandler(
                 Objects.requireNonNull(extraSection.getConfigurationSection("no-partner")), player);
 
-        if(secretPlayer.hasPartner()) {
-            partnerStack.replaceLoreLine("#partner#", secretPlayer.getPartner().getName());
+        if(currentSecretPlayer.hasPartner()) {
+            // partnerStack.setHeadData(secretPlayer.getPartner().getName());
+            partnerStack.setHeadData(currentSecretPlayer.getPartner().getUniqueId().toString());
+            partnerStack.replaceLoreLine("#partner#", currentSecretPlayer.getPartner().getName());
         }
 
         ItemStack guiItem = secretPlayer.hasPartner() ? partnerStack.getGuiItem() : noPartnerStack.getGuiItem();
