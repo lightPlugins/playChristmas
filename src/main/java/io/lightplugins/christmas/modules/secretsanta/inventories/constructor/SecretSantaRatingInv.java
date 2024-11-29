@@ -123,6 +123,17 @@ public class SecretSantaRatingInv {
 
         // add all gifts to the list
 
+        SecretPlayer currentSecretPlayer = null;
+        for(SecretPlayer secretPlayer : LightSecretSanta.instance.getSecretPlayerData()) {
+            if(secretPlayer.getPlayerUUID().equals(player.getUniqueId())) {
+                currentSecretPlayer = secretPlayer;
+            }
+        }
+
+        if(currentSecretPlayer == null) {
+            throw new RuntimeException("This player does not have a SecretSanta file!");
+        }
+
         for(SecretPlayer secretPlayer : LightSecretSanta.instance.getSecretPlayerData()) {
 
             if(secretPlayer.getGift() == null) {
@@ -149,6 +160,7 @@ public class SecretSantaRatingInv {
             im.setLore(currentLore);
             is.setItemMeta(im);
 
+            SecretPlayer finalCurrentSecretPlayer = currentSecretPlayer;
             allGifts.add(new GuiItem(is, inventoryClickEvent -> {
 
                 if(!inventoryClickEvent.isLeftClick()) {
@@ -166,29 +178,23 @@ public class SecretSantaRatingInv {
 
                 clickCooldown.add(player);
 
-                if(secretPlayer.hasPlayerDataFile(player.getUniqueId().toString())) {
-                    if(!secretPlayer.hasVoted()) {
+                if(!finalCurrentSecretPlayer.hasVoted()) {
 
-                        String formatedMaterialName =
-                                secretPlayer.getGift().getType().toString().toLowerCase().replace("_", " ");
-                        secretPlayer.setVoted();
-                        secretPlayer.addVote();
-                        LightMaster.instance.getMessageSender().sendPlayerMessage(
-                                LightSecretSanta.messageParams.successVoted()
-                                        .replace("#gift#", formatedMaterialName), player);
-                        SoundUtil.onSuccess(player);
-                        update();
-                        return;
-                    }
-
+                    String formatedMaterialName =
+                            secretPlayer.getGift().getType().toString().toLowerCase().replace("_", " ");
+                    finalCurrentSecretPlayer.setVoted();
+                    secretPlayer.addVote();
                     LightMaster.instance.getMessageSender().sendPlayerMessage(
-                            LightSecretSanta.messageParams.alreadyVoted(), player);
-                    SoundUtil.onFail(player);
-
-                } else {
-                    SoundUtil.onFail(player);
-                    LightMaster.instance.getDebugPrinting().print("ZZZ Thats not you! ");
+                            LightSecretSanta.messageParams.successVoted()
+                                    .replace("#gift#", formatedMaterialName), player);
+                    SoundUtil.onSuccess(player);
+                    update();
+                    return;
                 }
+
+                LightMaster.instance.getMessageSender().sendPlayerMessage(
+                        LightSecretSanta.messageParams.alreadyVoted(), player);
+                SoundUtil.onFail(player);
 
             }));
         }

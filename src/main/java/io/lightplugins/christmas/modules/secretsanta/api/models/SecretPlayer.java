@@ -2,7 +2,6 @@ package io.lightplugins.christmas.modules.secretsanta.api.models;
 
 import lombok.Getter;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -36,6 +35,9 @@ public class SecretPlayer {
     // check if player has a data file
     public boolean hasPlayerDataFile(String uuid) {
         return playerDataFile.getName().equalsIgnoreCase(uuid + ".yml");
+    }
+    public UUID getPlayerUUID() {
+        return UUID.fromString(playerDataFile.getName().replace(".yml", ""));
     }
     // check if player has a gift, if not gift is null
     public boolean hasGift() { return gift != null; }
