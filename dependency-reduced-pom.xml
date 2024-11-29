@@ -27,7 +27,6 @@
                   <shadedPattern>io.lightplugins.christmas.util.relocations.if</shadedPattern>
                 </relocation>
               </relocations>
-              <outputFile>C:/Users/phili/Desktop/playnayz development/plugins/${project.artifactId}-${project.version}-SNAPSHOT.jar</outputFile>
               <filters>
                 <filter>
                   <artifact>*:*</artifact>
@@ -117,6 +116,13 @@
       <artifactId>adventure-text-minimessage</artifactId>
       <version>4.17.0</version>
       <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>net.playnayz</groupId>
+      <artifactId>NAYZ-Core</artifactId>
+      <version>1.0.3</version>
+      <scope>system</scope>
+      <systemPath>C:/Users/philipp/Desktop/mc/plugins/NAYZ-Core.jar</systemPath>
     </dependency>
   </dependencies>
   <properties>

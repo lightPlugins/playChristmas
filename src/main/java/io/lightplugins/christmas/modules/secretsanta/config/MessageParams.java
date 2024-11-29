@@ -29,6 +29,8 @@ public class MessageParams {
     public String successVoted() { return config.getString("successVoted"); }
     public String alreadyVoted() { return config.getString("alreadyVoted"); }
     public String voteNotStarted() { return config.getString("voteNotStarted"); }
+    public String notEnoughMoneyToChangePartner() { return config.getString("notEnoughMoneyToChangePartner"); }
+
 
 
 }

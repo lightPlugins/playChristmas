@@ -15,3 +15,4 @@ titles:
   addPartner:
     upper: '<#ffdc73>Partner hinzufügen'
     lower: '<gray>Bitte gib den Namen des Partners in den Chat ein.'
+notEnoughMoneyToChangePartner: '<red>You do not have enough money to change your partner! You need <dark_red>#money#'

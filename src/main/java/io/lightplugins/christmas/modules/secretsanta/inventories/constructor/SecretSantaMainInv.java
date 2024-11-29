@@ -13,6 +13,8 @@ import io.lightplugins.christmas.util.SoundUtil;
 import io.lightplugins.christmas.util.constructor.InvConstructor;
 import io.lightplugins.christmas.util.handler.ActionHandler;
 import io.lightplugins.christmas.util.handler.ClickItemHandler;
+import net.playnayz.core.Core;
+import net.playnayz.core.gameplayer.GamePlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
@@ -179,6 +181,22 @@ public class SecretSantaMainInv {
                 if(secretPlayer.hasPartner()) {
                     // TODO: get the current amount of coins from the player
                     //       and remove the coins to the partner (if he had enough)
+                    GamePlayer gamePlayer = Core.instance.getGamePlayerManager().getGamePlayer(player);
+                    if(gamePlayer == null) {
+                        LightMaster.instance.getDebugPrinting().print("GamePlayer from NayzCore is null for player: " + player.getName());
+                        return;
+                    }
+                    int currentCoins = gamePlayer.getCoins();
+                    int price = 1500;
+
+                    if(currentCoins < price) {
+                        LightMaster.instance.getMessageSender().sendPlayerMessage(
+                                LightSecretSanta.messageParams.notEnoughMoneyToChangePartner()
+                                        .replace("#money#", String.valueOf(price)), player);
+                        SoundUtil.onFail(player);
+                        return;
+                    }
+                    gamePlayer.setCoins(currentCoins - price);
                     secretPlayer.setChatCheck(true);
                     player.closeInventory();
                     String upperTitle = LightSecretSanta.messageParams.addPartnerTitleUpper();

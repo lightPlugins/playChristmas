@@ -123,6 +123,14 @@
         </dependency>
 
         <dependency>
+            <groupId>net.playnayz</groupId>
+            <artifactId>NAYZ-Core</artifactId>
+            <version>1.0.3</version>
+            <scope>system</scope>
+            <systemPath>C:/Users/philipp/Desktop/mc/plugins/NAYZ-Core.jar</systemPath>
+        </dependency>
+
+        <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>1.18.34</version>
@@ -155,11 +163,7 @@
                                     <shadedPattern>io.lightplugins.christmas.util.relocations.if</shadedPattern>
                                 </relocation>
                             </relocations>
-                            <!-- Desktop PC -->
-                            <outputFile>C:/Users/phili/Desktop/playnayz development/plugins/${project.artifactId}-${project.version}-SNAPSHOT.jar</outputFile>
-                            <!-- Laptop -->
-                            <!--<outputFile>C:/Users/philipp/Desktop/mc/plugins/${project.artifactId}-${project.version}-SNAPSHOT.jar</outputFile> -->
-                           <filters>
+                            <filters>
                                 <filter>
                                     <artifact>*:*</artifact>
                                     <excludes>
